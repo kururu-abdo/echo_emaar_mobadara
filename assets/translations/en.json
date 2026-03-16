@@ -1,0 +1,501 @@
+{
+  "app_name": "E-Commerce",
+  
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "yes": "Yes",
+    "no": "No",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "apply": "Apply",
+    "reset": "Reset",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "loading": "Loading...",
+    "retry": "Try Again",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "confirm": "Confirm",
+    "continue": "Continue",
+    "see_all": "See All",
+    "view_all": "View All",
+    "show_more": "Show More",
+    "show_less": "Show Less",
+    "read_more": "Read more",
+    "or": "or",
+    "and": "and"
+  },
+
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "sign_in": "Sign In",
+    "sign_up": "Sign Up",
+    "sign_out": "Sign Out",
+    "welcome": "Welcome!",
+    "welcome_back": "Welcome Back!",
+    "get_started": "Get Started",
+    "create_account": "Create Account",
+    "already_have_account": "Already have an account?",
+    "dont_have_account": "Don't have an account?",
+    "forgot_password": "Forgot Password?",
+    "reset_password": "Reset Password",
+    
+    "phone_number": "Phone Number",
+    "enter_phone": "Enter your phone number",
+    "phone_hint": "+1 234 567 8900",
+    "invalid_phone": "Invalid phone number",
+    "phone_required": "Phone number is required",
+    
+    "otp": "OTP",
+    "enter_otp": "Enter OTP",
+    "otp_sent": "OTP sent to your phone",
+    "otp_code": "OTP Code",
+    "verify_otp": "Verify OTP",
+    "resend_otp": "Resend OTP",
+    "otp_expires_in": "OTP expires in",
+    "invalid_otp": "Invalid OTP",
+    "otp_required": "OTP is required",
+    
+    "name": "Full Name",
+    "enter_name": "Enter your full name",
+    "name_required": "Name is required",
+    "name_hint": "John Doe",
+    
+    "email": "Email",
+    "enter_email": "Enter your email",
+    "email_hint": "john@example.com",
+    "invalid_email": "Invalid email address",
+    "email_required": "Email is required",
+    
+    "password": "Password",
+    "enter_password": "Enter your password",
+    "confirm_password": "Confirm Password",
+    "password_required": "Password is required",
+    "password_mismatch": "Passwords don't match",
+    "password_min_length": "Password must be at least 6 characters",
+    
+    "login_success": "Logged in successfully",
+    "logout_success": "Logged out successfully",
+    "register_success": "Registration successful",
+    "otp_verified": "Phone verified successfully",
+    
+    "login_error": "Login failed. Please try again",
+    "register_error": "Registration failed",
+    "otp_error": "OTP verification failed",
+    "session_expired": "Session expired. Please login again",
+    
+    "terms_privacy": "By continuing, you agree to our Terms of Service and Privacy Policy",
+    "accept_terms": "I accept the Terms & Conditions"
+  },
+
+  "home": {
+    "home": "Home",
+    "hello": "Hello 👋",
+    "what_looking_for": "What are you looking for today?",
+    "categories": "Categories",
+    "featured": "✨ Featured",
+    "most_sold": "🔥 Most Sold",
+    "best_sellers": "Best Sellers",
+    "most_wanted": "💎 Most Wanted",
+    "trending_now": "Trending Now",
+    "new_arrivals": "New Arrivals",
+    "you_may_like": "You May Also Like",
+    "special_offer": "SPECIAL OFFER",
+    "get_discount": "Get 50% Off\nYour First Order",
+    "shop_now": "Shop Now",
+    "search_products": "Search products...",
+    "no_products": "No products available",
+    "loading_products": "Loading products..."
+  },
+
+  "products": {
+    "products": "Products",
+    "product": "Product",
+    "all_products": "All Products",
+    "product_details": "Product Details",
+    "product_name": "Product Name",
+    "description": "Description",
+    "price": "Price",
+    "sale_price": "Sale Price",
+    "original_price": "Original Price",
+    "discount": "Discount",
+    "save": "Save",
+    "off": "OFF",
+    "free": "FREE",
+    
+    "category": "Category",
+    "categories": "Categories",
+    "all_categories": "All Categories",
+    "uncategorized": "Uncategorized",
+    
+    "in_stock": "In Stock",
+    "out_of_stock": "Out of Stock",
+    "low_stock": "Low Stock",
+    "stock": "Stock",
+    "availability": "Availability",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "x_in_stock": "{{count}} in stock",
+    
+    "add_to_cart": "Add to Cart",
+    "buy_now": "Buy Now",
+    "added_to_cart": "Added to cart",
+    
+    "rating": "Rating",
+    "reviews": "Reviews",
+    "x_reviews": "{{count}} reviews",
+    "no_reviews": "No reviews yet",
+    
+    "variants": "Options",
+    "select_variant": "Select option",
+    "color": "Color",
+    "size": "Size",
+    "quantity": "Quantity",
+    
+    "sku": "SKU",
+    "weight": "Weight",
+    "dimensions": "Dimensions",
+    "tags": "Tags",
+    
+    "related_products": "Related Products",
+    "you_may_also_like": "You May Also Like",
+    "similar_products": "Similar Products",
+    
+    "search_results": "Search Results",
+    "no_results": "No results found",
+    "no_results_for": "No results found for \"{{query}}\"",
+    "try_different_search": "Try a different search term",
+    
+    "filters": "Filters",
+    "sort_by": "Sort By",
+    "price_range": "Price Range",
+    "min_price": "Min Price",
+    "max_price": "Max Price",
+    "clear_filters": "Clear Filters",
+    "apply_filters": "Apply Filters",
+    "x_products_found": "{{count}} products found",
+    
+    "sort_newest": "Newest First",
+    "sort_oldest": "Oldest First",
+    "sort_price_low": "Price: Low to High",
+    "sort_price_high": "Price: High to Low",
+    "sort_name_az": "Name: A to Z",
+    "sort_name_za": "Name: Z to A",
+    "sort_rating": "Highest Rated",
+    "sort_popular": "Most Popular"
+  },
+
+  "cart": {
+    "cart": "Cart",
+    "shopping_cart": "Shopping Cart",
+    "my_cart": "My Cart",
+    "empty_cart": "Your cart is empty",
+    "empty_cart_message": "Add items to your cart to see them here",
+    "start_shopping": "Start Shopping",
+    
+    "x_items": "{{count}} items",
+    "x_item": "{{count}} item",
+    "item_count": "Items ({{count}})",
+    
+    "subtotal": "Subtotal",
+    "tax": "Tax",
+    "discount": "Discount",
+    "shipping": "Shipping",
+    "shipping_fee": "Shipping Fee",
+    "total": "Total",
+    "grand_total": "Grand Total",
+    
+    "update_cart": "Update Cart",
+    "clear_cart": "Clear Cart",
+    "clear_cart_confirm": "Are you sure you want to remove all items from your cart?",
+    "clear_all": "Clear All",
+    
+    "remove_item": "Remove Item",
+    "remove_item_confirm": "Remove {{name}} from cart?",
+    "item_removed": "Item removed",
+    
+    "quantity_updated": "Quantity updated",
+    "max_quantity_reached": "Maximum quantity reached",
+    
+    "proceed_to_checkout": "Proceed to Checkout",
+    "continue_shopping": "Continue Shopping",
+    "login_to_checkout": "Login to Checkout",
+    
+    "cart_syncing": "Syncing...",
+    "cart_synced": "Cart synced successfully",
+    "cart_sync_failed": "Sync failed",
+    "cart_local": "Cart is stored locally",
+    
+    "guest_cart_notice": "Items will be saved when you login"
+  },
+
+  "checkout": {
+    "checkout": "Checkout",
+    "complete_order": "Complete Order",
+    "order_summary": "Order Summary",
+    "order_details": "Order Details",
+    
+    "shipping_address": "Shipping Address",
+    "select_address": "Select Address",
+    "add_new_address": "Add New Address",
+    "edit_address": "Edit Address",
+    "delete_address": "Delete Address",
+    "default_address": "Default",
+    "set_as_default": "Set as default",
+    "no_addresses": "No shipping addresses yet",
+    "no_addresses_message": "Add a delivery address to continue",
+    
+    "address_name": "Full Name",
+    "address_phone": "Phone Number",
+    "address_street": "Street Address",
+    "address_street2": "Apartment, suite, etc. (optional)",
+    "address_city": "City",
+    "address_state": "State / Province",
+    "address_zip": "ZIP / Postal Code",
+    "address_country": "Country",
+    
+    "address_required": "Address is required",
+    "address_saved": "Address saved",
+    "address_deleted": "Address deleted",
+    
+    "payment_method": "Payment Method",
+    "select_payment": "Select Payment Method",
+    "cod": "Cash on Delivery",
+    "cod_subtitle": "Pay when you receive",
+    "card": "Credit/Debit Card",
+    "card_subtitle": "Visa, Mastercard, Amex",
+    
+    "card_number": "Card Number",
+    "card_holder": "Cardholder Name",
+    "card_holder_hint": "JOHN DOE",
+    "expiry_date": "Expiry",
+    "expiry_hint": "MM/YY",
+    "cvv": "CVV",
+    "cvv_hint": "123",
+    
+    "card_number_required": "Card number is required",
+    "card_number_invalid": "Invalid card number",
+    "card_holder_required": "Cardholder name is required",
+    "expiry_required": "Expiry date is required",
+    "expiry_invalid": "Invalid expiry date",
+    "cvv_required": "CVV is required",
+    "cvv_invalid": "Invalid CVV",
+    
+    "order_notes": "Order Notes (Optional)",
+    "order_notes_hint": "Add any special instructions...",
+    
+    "place_order": "Place Order",
+    "processing_payment": "Processing Payment...",
+    "processing_payment_message": "Please wait while we process your payment",
+    "placing_order": "Placing Your Order...",
+    "placing_order_message": "Almost there! Creating your order",
+    
+    "payment_failed": "Payment failed",
+    "order_failed": "Order failed",
+    "please_select_address": "Please select a delivery address",
+    "please_select_payment": "Please select a payment method",
+    
+    "estimated_delivery": "Estimated Delivery",
+    "delivery_time": "5-7 business days", 
+    "payment_summary":  "Payment Summary"
+  },
+
+  "orders": {
+    "orders": "Orders",
+    "my_orders": "My Orders",
+    "order_history": "Order History",
+    "order": "Order",
+    "order_number": "Order Number",
+    "order_id": "Order ID",
+    "order_date": "Order Date",
+    "order_status": "Order Status",
+    "order_total": "Order Total",
+    
+    "no_orders": "No orders yet",
+    "no_orders_message": "Start shopping to see your orders here",
+    
+    "order_details": "Order Details",
+    "track_order": "Track Order",
+    "reorder": "Reorder",
+    "cancel_order": "Cancel Order",
+    "cancel_order_confirm": "Are you sure you want to cancel this order?",
+    "order_cancelled": "Order cancelled",
+    "cannot_cancel": "Cannot cancel this order",
+    
+    "status_pending": "Pending",
+    "status_confirmed": "Confirmed",
+    "status_processing": "Processing",
+    "status_shipped": "Shipped",
+    "status_delivered": "Delivered",
+    "status_cancelled": "Cancelled",
+    "status_refunded": "Refunded",
+    
+    "order_placed": "Order Placed",
+    "order_confirmed": "Order Confirmed",
+    "order_shipped": "Order Shipped",
+    "order_delivered": "Order Delivered",
+    
+    "payment_status": "Payment Status",
+    "payment_pending": "Payment Pending",
+    "payment_paid": "Paid",
+    "payment_failed": "Payment Failed",
+    
+    "delivery_address": "Delivery Address",
+    "delivery_date": "Delivery Date",
+    "tracking_number": "Tracking Number",
+    
+    "order_items": "Order Items",
+    "x_items_ordered": "{{count}} items ordered", 
+
+  "pending": "Pending",
+  "confirmed": "Confirmed",
+  "preparing": "Preparing",
+  "in_transit": "Out for Delivery",
+  "delivered": "Delivered",
+  "partially_delivered": "Partially Delivered",
+  "cancelled": "Cancelled",
+  "draft": "Quotation",
+  "sent": "Sent"
+  },
+
+  "success": {
+    "order_placed": "Order Placed Successfully!",
+    "thank_you": "Thank you for your order",
+    "order_confirmation": "Order Confirmation",
+    "confirmation_sent": "A confirmation email has been sent to your email address",
+    "continue_shopping": "Continue Shopping",
+    "view_order": "View Order",
+    "back_to_home": "Back to Home"
+  },
+
+  "profile": {
+    "profile": "Profile",
+    "my_profile": "My Profile",
+    "edit_profile": "Edit Profile",
+    "account": "Account",
+    "account_settings": "Account Settings",
+    
+    "personal_info": "Personal Information",
+    "contact_info": "Contact Information",
+    
+    "addresses": "Addresses",
+    "my_addresses": "My Addresses",
+    "saved_addresses": "Saved Addresses",
+    
+    "payment_methods": "Payment Methods",
+    "saved_cards": "Saved Cards",
+    
+    "wishlist": "Wishlist",
+    "favorites": "Favorites",
+    "my_wishlist": "My Wishlist",
+    
+    "notifications": "Notifications",
+    "notification_settings": "Notification Settings",
+    "push_notifications": "Push Notifications",
+    "email_notifications": "Email Notifications",
+    "sms_notifications": "SMS Notifications",
+    
+    "language": "Language",
+    "select_language": "Select Language",
+    "english": "English",
+    "arabic": "العربية",
+    
+    "theme": "Theme",
+    "light_mode": "Light Mode",
+    "dark_mode": "Dark Mode",
+    "system_default": "System Default",
+    
+    "help_support": "Help & Support",
+    "faq": "FAQs",
+    "contact_us": "Contact Us",
+    "about": "About",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    
+    "logout_confirm": "Are you sure you want to logout?",
+    "delete_account": "Delete Account",
+    "delete_account_confirm": "Are you sure you want to delete your account? This action cannot be undone."
+  },
+
+  "errors": {
+    "error_occurred": "An error occurred",
+    "something_went_wrong": "Something went wrong",
+    "please_try_again": "Please try again",
+    "network_error": "No internet connection",
+    "network_error_message": "Please check your internet connection and try again",
+    "server_error": "Server error",
+    "server_error_message": "Unable to connect to server. Please try again later",
+    "timeout_error": "Request timeout",
+    "timeout_error_message": "The request took too long. Please try again",
+    "not_found": "Not found",
+    "not_found_message": "The requested resource was not found",
+    "unauthorized": "Unauthorized",
+    "unauthorized_message": "Please login to continue",
+    "forbidden": "Access denied",
+    "forbidden_message": "You don't have permission to access this resource",
+    "validation_error": "Validation error",
+    "required_field": "This field is required",
+    "invalid_input": "Invalid input",
+    "unknown_error": "Unknown error occurred"
+  },
+
+  "validation": {
+    "required": "Required",
+    "invalid": "Invalid",
+    "too_short": "Too short",
+    "too_long": "Too long",
+    "must_be_number": "Must be a number",
+    "must_be_email": "Must be a valid email",
+    "must_be_phone": "Must be a valid phone number",
+    "min_length": "Minimum {{count}} characters",
+    "max_length": "Maximum {{count}} characters",
+    "min_value": "Minimum value is {{value}}",
+    "max_value": "Maximum value is {{value}}"
+  },
+
+  "notifications": {
+    "notifications": "Notifications",
+    "no_notifications": "No notifications",
+    "mark_all_read": "Mark all as read",
+    "clear_all": "Clear all",
+    "new_order": "New order placed",
+    "order_shipped": "Your order has been shipped",
+    "order_delivered": "Your order has been delivered",
+    "price_drop": "Price drop alert",
+    "back_in_stock": "Item back in stock"
+  },
+
+  "time": {
+    "just_now": "Just now",
+    "x_minutes_ago": "{{count}} minutes ago",
+    "x_hours_ago": "{{count}} hours ago",
+    "x_days_ago": "{{count}} days ago",
+    "yesterday": "Yesterday",
+    "today": "Today",
+    "tomorrow": "Tomorrow"
+  },
+
+  "currency": {
+    "symbol": "$",
+    "code": "SAR",
+    "format": "${{amount}}"
+  },
+
+  "bottom_nav": {
+    "home": "Home",
+    "categories": "Categories",
+    "cart": "Cart",
+    "orders": "Orders",
+    "profile": "Profile"
+  }
+}

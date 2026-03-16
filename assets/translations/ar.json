@@ -1,0 +1,502 @@
+{
+  "app_name": "التجارة الإلكترونية",
+  
+  "common": {
+    "ok": "حسناً",
+    "cancel": "إلغاء",
+    "yes": "نعم",
+    "no": "لا",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "search": "بحث",
+    "filter": "تصفية",
+    "sort": "ترتيب",
+    "apply": "تطبيق",
+    "reset": "إعادة تعيين",
+    "close": "إغلاق",
+    "back": "رجوع",
+    "next": "التالي",
+    "done": "تم",
+    "loading": "جاري التحميل...",
+    "retry": "حاول مرة أخرى",
+    "error": "خطأ",
+    "success": "نجح",
+    "warning": "تحذير",
+    "confirm": "تأكيد",
+    "continue": "متابعة",
+    "see_all": "عرض الكل",
+    "view_all": "عرض الجميع",
+    "show_more": "عرض المزيد",
+    "show_less": "عرض أقل",
+    "read_more": "اقرأ المزيد",
+    "or": "أو",
+    "and": "و"
+  },
+
+  "auth": {
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "register": "تسجيل",
+    "sign_in": "تسجيل الدخول",
+    "sign_up": "إنشاء حساب",
+    "sign_out": "خروج",
+    "welcome": "مرحباً!",
+    "welcome_back": "مرحباً بعودتك!",
+    "get_started": "ابدأ الآن",
+    "create_account": "إنشاء حساب",
+    "already_have_account": "لديك حساب بالفعل؟",
+    "dont_have_account": "ليس لديك حساب؟",
+    "forgot_password": "نسيت كلمة المرور؟",
+    "reset_password": "إعادة تعيين كلمة المرور",
+    
+    "phone_number": "رقم الهاتف",
+    "enter_phone": "أدخل رقم هاتفك",
+    "phone_hint": "٠١٢ ٣٤٥ ٦٧٨٩",
+    "invalid_phone": "رقم هاتف غير صحيح",
+    "phone_required": "رقم الهاتف مطلوب",
+    
+    "otp": "رمز التحقق",
+    "enter_otp": "أدخل رمز التحقق",
+    "otp_sent": "تم إرسال رمز التحقق إلى هاتفك",
+    "otp_code": "رمز التحقق",
+    "verify_otp": "تحقق من الرمز",
+    "resend_otp": "إعادة إرسال الرمز",
+    "otp_expires_in": "ينتهي الرمز في",
+    "invalid_otp": "رمز تحقق غير صحيح",
+    "otp_required": "رمز التحقق مطلوب",
+    
+    "name": "الاسم الكامل",
+    "enter_name": "أدخل اسمك الكامل",
+    "name_required": "الاسم مطلوب",
+    "name_hint": "أحمد محمد",
+    
+    "email": "البريد الإلكتروني",
+    "enter_email": "أدخل بريدك الإلكتروني",
+    "email_hint": "ahmed@example.com",
+    "invalid_email": "بريد إلكتروني غير صحيح",
+    "email_required": "البريد الإلكتروني مطلوب",
+    
+    "password": "كلمة المرور",
+    "enter_password": "أدخل كلمة المرور",
+    "confirm_password": "تأكيد كلمة المرور",
+    "password_required": "كلمة المرور مطلوبة",
+    "password_mismatch": "كلمات المرور غير متطابقة",
+    "password_min_length": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+    
+    "login_success": "تم تسجيل الدخول بنجاح",
+    "logout_success": "تم تسجيل الخروج بنجاح",
+    "register_success": "تم التسجيل بنجاح",
+    "otp_verified": "تم التحقق من الهاتف بنجاح",
+    
+    "login_error": "فشل تسجيل الدخول. حاول مرة أخرى",
+    "register_error": "فشل التسجيل",
+    "otp_error": "فشل التحقق من الرمز",
+    "session_expired": "انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى",
+    
+    "terms_privacy": "بالمتابعة، أنت توافق على شروط الخدمة وسياسة الخصوصية",
+    "accept_terms": "أوافق على الشروط والأحكام"
+  },
+
+  "home": {
+    "home": "الرئيسية",
+    "hello": "مرحباً 👋",
+    "what_looking_for": "عن ماذا تبحث اليوم؟",
+    "categories": "الفئات",
+    "featured": "✨ مميز",
+    "most_sold": "🔥 الأكثر مبيعاً",
+    "best_sellers": "الأكثر مبيعاً",
+    "most_wanted": "💎 الأكثر طلباً",
+    "trending_now": "رائج الآن",
+    "new_arrivals": "وصل حديثاً",
+    "you_may_like": "قد يعجبك أيضاً",
+    "special_offer": "عرض خاص",
+    "get_discount": "احصل على خصم 50%\nعلى طلبك الأول",
+    "shop_now": "تسوق الآن",
+    "search_products": "ابحث عن المنتجات...",
+    "no_products": "لا توجد منتجات متاحة",
+    "loading_products": "جاري تحميل المنتجات..."
+  },
+
+  "products": {
+    "products": "المنتجات",
+    "product": "منتج",
+    "all_products": "جميع المنتجات",
+    "product_details": "تفاصيل المنتج",
+    "product_name": "اسم المنتج",
+    "description": "الوصف",
+    "price": "السعر",
+    "sale_price": "سعر البيع",
+    "original_price": "السعر الأصلي",
+    "discount": "خصم",
+    "save": "وفر",
+    "off": "خصم",
+    "free": "مجاني",
+    
+    "category": "الفئة",
+    "categories": "الفئات",
+    "all_categories": "جميع الفئات",
+    "uncategorized": "غير مصنف",
+    
+    "in_stock": "متوفر",
+    "out_of_stock": "غير متوفر",
+    "low_stock": "كمية محدودة",
+    "stock": "المخزون",
+    "availability": "التوفر",
+    "available": "متاح",
+    "unavailable": "غير متاح",
+    "x_in_stock": "{{count}} متوفر",
+    
+    "add_to_cart": "أضف للسلة",
+    "buy_now": "اشترِ الآن",
+    "added_to_cart": "تمت الإضافة للسلة",
+    
+    "rating": "التقييم",
+    "reviews": "التقييمات",
+    "x_reviews": "{{count}} تقييم",
+    "no_reviews": "لا توجد تقييمات بعد",
+    
+    "variants": "الخيارات",
+    "select_variant": "اختر الخيار",
+    "color": "اللون",
+    "size": "المقاس",
+    "quantity": "الكمية",
+    
+    "sku": "رمز المنتج",
+    "weight": "الوزن",
+    "dimensions": "الأبعاد",
+    "tags": "الوسوم",
+    
+    "related_products": "منتجات ذات صلة",
+    "you_may_also_like": "قد يعجبك أيضاً",
+    "similar_products": "منتجات مشابهة",
+    
+    "search_results": "نتائج البحث",
+    "no_results": "لم يتم العثور على نتائج",
+    "no_results_for": "لم يتم العثور على نتائج لـ \"{{query}}\"",
+    "try_different_search": "جرب مصطلح بحث مختلف",
+    
+    "filters": "التصفية",
+    "sort_by": "ترتيب حسب",
+    "price_range": "نطاق السعر",
+    "min_price": "أقل سعر",
+    "max_price": "أعلى سعر",
+    "clear_filters": "مسح التصفية",
+    "apply_filters": "تطبيق التصفية",
+    "x_products_found": "تم العثور على {{count}} منتج",
+    
+    "sort_newest": "الأحدث أولاً",
+    "sort_oldest": "الأقدم أولاً",
+    "sort_price_low": "السعر: من الأقل للأعلى",
+    "sort_price_high": "السعر: من الأعلى للأقل",
+    "sort_name_az": "الاسم: أ - ي",
+    "sort_name_za": "الاسم: ي - أ",
+    "sort_rating": "الأعلى تقييماً",
+    "sort_popular": "الأكثر شعبية"
+  },
+
+  "cart": {
+    "cart": "السلة",
+    "shopping_cart": "سلة التسوق",
+    "my_cart": "سلتي",
+    "empty_cart": "سلتك فارغة",
+    "empty_cart_message": "أضف منتجات إلى سلتك لرؤيتها هنا",
+    "start_shopping": "ابدأ التسوق",
+    
+    "x_items": "{{count}} منتج",
+    "x_item": "منتج واحد",
+    "item_count": "المنتجات ({{count}})",
+    
+    "subtotal": "المجموع الفرعي",
+    "tax": "الضريبة",
+    "discount": "الخصم",
+    "shipping": "الشحن",
+    "shipping_fee": "رسوم الشحن",
+    "total": "الإجمالي",
+    "grand_total": "الإجمالي الكلي",
+    
+    "update_cart": "تحديث السلة",
+    "clear_cart": "إفراغ السلة",
+    "clear_cart_confirm": "هل أنت متأكد من إزالة جميع المنتجات من السلة؟",
+    "clear_all": "مسح الكل",
+    
+    "remove_item": "إزالة المنتج",
+    "remove_item_confirm": "إزالة {{name}} من السلة؟",
+    "item_removed": "تمت الإزالة",
+    
+    "quantity_updated": "تم تحديث الكمية",
+    "max_quantity_reached": "تم الوصول للحد الأقصى",
+    
+    "proceed_to_checkout": "إتمام الطلب",
+    "continue_shopping": "متابعة التسوق",
+    "login_to_checkout": "تسجيل الدخول لإتمام الطلب",
+    
+    "cart_syncing": "جاري المزامنة...",
+    "cart_synced": "تمت المزامنة بنجاح",
+    "cart_sync_failed": "فشلت المزامنة",
+    "cart_local": "السلة محفوظة محلياً",
+    
+    "guest_cart_notice": "سيتم حفظ المنتجات عند تسجيل الدخول"
+  },
+
+  "checkout": {
+    "checkout": "إتمام الطلب",
+    "complete_order": "إتمام الطلب",
+    "order_summary": "ملخص الطلب",
+    "order_details": "تفاصيل الطلب",
+    
+    "shipping_address": "عنوان التوصيل",
+    "select_address": "اختر العنوان",
+    "add_new_address": "إضافة عنوان جديد",
+    "edit_address": "تعديل العنوان",
+    "delete_address": "حذف العنوان",
+    "default_address": "افتراضي",
+    "set_as_default": "تعيين كافتراضي",
+    "no_addresses": "لا توجد عناوين توصيل",
+    "no_addresses_message": "أضف عنوان توصيل للمتابعة",
+    
+    "address_name": "الاسم الكامل",
+    "address_phone": "رقم الهاتف",
+    "address_street": "عنوان الشارع",
+    "address_street2": "شقة، جناح، إلخ (اختياري)",
+    "address_city": "المدينة",
+    "address_state": "المحافظة / المنطقة",
+    "address_zip": "الرمز البريدي",
+    "address_country": "الدولة",
+    
+    "address_required": "العنوان مطلوب",
+    "address_saved": "تم حفظ العنوان",
+    "address_deleted": "تم حذف العنوان",
+    
+    "payment_method": "طريقة الدفع",
+    "select_payment": "اختر طريقة الدفع",
+    "cod": "الدفع عند الاستلام",
+    "cod_subtitle": "ادفع عند استلام الطلب",
+    "card": "بطاقة ائتمان/خصم",
+    "card_subtitle": "فيزا، ماستركارد، أمريكان إكسبريس",
+    
+    "card_number": "رقم البطاقة",
+    "card_holder": "اسم حامل البطاقة",
+    "card_holder_hint": "أحمد محمد",
+    "expiry_date": "تاريخ الانتهاء",
+    "expiry_hint": "MM/YY",
+    "cvv": "رمز الأمان",
+    "cvv_hint": "123",
+    
+    "card_number_required": "رقم البطاقة مطلوب",
+    "card_number_invalid": "رقم بطاقة غير صحيح",
+    "card_holder_required": "اسم حامل البطاقة مطلوب",
+    "expiry_required": "تاريخ الانتهاء مطلوب",
+    "expiry_invalid": "تاريخ انتهاء غير صحيح",
+    "cvv_required": "رمز الأمان مطلوب",
+    "cvv_invalid": "رمز أمان غير صحيح",
+    
+    "order_notes": "ملاحظات الطلب (اختياري)",
+    "order_notes_hint": "أضف أي تعليمات خاصة...",
+    
+    "place_order": "تأكيد الطلب",
+    "processing_payment": "جاري معالجة الدفع...",
+    "processing_payment_message": "يرجى الانتظار أثناء معالجة دفعتك",
+    "placing_order": "جاري إنشاء طلبك...",
+    "placing_order_message": "أوشكنا على الانتهاء! جاري إنشاء طلبك",
+    
+    "payment_failed": "فشل الدفع",
+    "order_failed": "فشل الطلب",
+    "please_select_address": "يرجى اختيار عنوان التوصيل",
+    "please_select_payment": "يرجى اختيار طريقة الدفع",
+    
+    "estimated_delivery": "التوصيل المتوقع",
+    "delivery_time": "٥-٧ أيام عمل",
+    "payment_summary": "ملخص الدفع"
+  },
+
+  "orders": {
+    "orders": "الطلبات",
+    "my_orders": "طلباتي",
+    "order_history": "سجل الطلبات",
+    "order": "طلب",
+    "order_number": "رقم الطلب",
+    "order_id": "معرف الطلب",
+    "order_date": "تاريخ الطلب",
+    "order_status": "حالة الطلب",
+    "order_total": "إجمالي الطلب",
+    
+    "no_orders": "لا توجد طلبات بعد",
+    "no_orders_message": "ابدأ التسوق لترى طلباتك هنا",
+    
+    "order_details": "تفاصيل الطلب",
+    "track_order": "تتبع الطلب",
+    "reorder": "إعادة الطلب",
+    "cancel_order": "إلغاء الطلب",
+    "cancel_order_confirm": "هل أنت متأكد من إلغاء هذا الطلب؟",
+    "order_cancelled": "تم إلغاء الطلب",
+    "cannot_cancel": "لا يمكن إلغاء هذا الطلب",
+    
+    "status_pending": "قيد الانتظار",
+    "status_confirmed": "مؤكد",
+    "status_processing": "قيد المعالجة",
+    "status_shipped": "تم الشحن",
+    "status_delivered": "تم التوصيل",
+    "status_cancelled": "ملغي",
+    "status_refunded": "مسترد",
+    
+    "order_placed": "تم تقديم الطلب",
+    "order_confirmed": "تم تأكيد الطلب",
+    "order_shipped": "تم شحن الطلب",
+    "order_delivered": "تم توصيل الطلب",
+    
+    "payment_status": "حالة الدفع",
+    "payment_pending": "الدفع معلق",
+    "payment_paid": "مدفوع",
+    "payment_failed": "فشل الدفع",
+    
+    "delivery_address": "عنوان التوصيل",
+    "delivery_date": "تاريخ التوصيل",
+    "tracking_number": "رقم التتبع",
+    
+    "order_items": "منتجات الطلب",
+    "x_items_ordered": "تم طلب {{count}} منتج", 
+
+    
+  "pending": "قيد الانتظار",
+  "confirmed": "تم التأكيد",
+  "preparing": "جاري التجهيز",
+  "in_transit": "خارج للتوصيل",
+  "delivered": "تم التسليم",
+  "partially_delivered": "تم التسليم جزئياً",
+  "cancelled": "ملغي",
+  "draft": "مسودة / عرض سعر",
+  "sent": "تم الإرسال"
+  },
+
+  "success": {
+    "order_placed": "تم تقديم الطلب بنجاح!",
+    "thank_you": "شكراً لطلبك",
+    "order_confirmation": "تأكيد الطلب",
+    "confirmation_sent": "تم إرسال رسالة تأكيد إلى بريدك الإلكتروني",
+    "continue_shopping": "متابعة التسوق",
+    "view_order": "عرض الطلب",
+    "back_to_home": "العودة للرئيسية"
+  },
+
+  "profile": {
+    "profile": "الملف الشخصي",
+    "my_profile": "ملفي الشخصي",
+    "edit_profile": "تعديل الملف الشخصي",
+    "account": "الحساب",
+    "account_settings": "إعدادات الحساب",
+    
+    "personal_info": "المعلومات الشخصية",
+    "contact_info": "معلومات الاتصال",
+    
+    "addresses": "العناوين",
+    "my_addresses": "عناويني",
+    "saved_addresses": "العناوين المحفوظة",
+    
+    "payment_methods": "طرق الدفع",
+    "saved_cards": "البطاقات المحفوظة",
+    
+    "wishlist": "المفضلة",
+    "favorites": "المفضلة",
+    "my_wishlist": "قائمة المفضلة",
+    
+    "notifications": "الإشعارات",
+    "notification_settings": "إعدادات الإشعارات",
+    "push_notifications": "الإشعارات الفورية",
+    "email_notifications": "إشعارات البريد الإلكتروني",
+    "sms_notifications": "إشعارات الرسائل القصيرة",
+    
+    "language": "اللغة",
+    "select_language": "اختر اللغة",
+    "english": "English",
+    "arabic": "العربية",
+    
+    "theme": "المظهر",
+    "light_mode": "الوضع الفاتح",
+    "dark_mode": "الوضع الداكن",
+    "system_default": "افتراضي النظام",
+    
+    "help_support": "المساعدة والدعم",
+    "faq": "الأسئلة الشائعة",
+    "contact_us": "اتصل بنا",
+    "about": "حول",
+    "terms": "شروط الخدمة",
+    "privacy": "سياسة الخصوصية",
+    
+    "logout_confirm": "هل أنت متأكد من تسجيل الخروج؟",
+    "delete_account": "حذف الحساب",
+    "delete_account_confirm": "هل أنت متأكد من حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء."
+  },
+
+  "errors": {
+    "error_occurred": "حدث خطأ",
+    "something_went_wrong": "حدث خطأ ما",
+    "please_try_again": "يرجى المحاولة مرة أخرى",
+    "network_error": "لا يوجد اتصال بالإنترنت",
+    "network_error_message": "يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى",
+    "server_error": "خطأ في الخادم",
+    "server_error_message": "تعذر الاتصال بالخادم. يرجى المحاولة لاحقاً",
+    "timeout_error": "انتهت مهلة الطلب",
+    "timeout_error_message": "استغرق الطلب وقتاً طويلاً. يرجى المحاولة مرة أخرى",
+    "not_found": "غير موجود",
+    "not_found_message": "المورد المطلوب غير موجود",
+    "unauthorized": "غير مصرح",
+    "unauthorized_message": "يرجى تسجيل الدخول للمتابعة",
+    "forbidden": "الوصول مرفوض",
+    "forbidden_message": "ليس لديك صلاحية للوصول إلى هذا المورد",
+    "validation_error": "خطأ في التحقق",
+    "required_field": "هذا الحقل مطلوب",
+    "invalid_input": "إدخال غير صحيح",
+    "unknown_error": "حدث خطأ غير معروف"
+  },
+
+  "validation": {
+    "required": "مطلوب",
+    "invalid": "غير صحيح",
+    "too_short": "قصير جداً",
+    "too_long": "طويل جداً",
+    "must_be_number": "يجب أن يكون رقماً",
+    "must_be_email": "يجب أن يكون بريد إلكتروني صحيح",
+    "must_be_phone": "يجب أن يكون رقم هاتف صحيح",
+    "min_length": "الحد الأدنى {{count}} أحرف",
+    "max_length": "الحد الأقصى {{count}} أحرف",
+    "min_value": "القيمة الدنيا {{value}}",
+    "max_value": "القيمة القصوى {{value}}"
+  },
+
+  "notifications": {
+    "notifications": "الإشعارات",
+    "no_notifications": "لا توجد إشعارات",
+    "mark_all_read": "تعليم الكل كمقروء",
+    "clear_all": "مسح الكل",
+    "new_order": "تم تقديم طلب جديد",
+    "order_shipped": "تم شحن طلبك",
+    "order_delivered": "تم توصيل طلبك",
+    "price_drop": "تنبيه انخفاض السعر",
+    "back_in_stock": "المنتج متوفر مرة أخرى"
+  },
+
+  "time": {
+    "just_now": "الآن",
+    "x_minutes_ago": "منذ {{count}} دقيقة",
+    "x_hours_ago": "منذ {{count}} ساعة",
+    "x_days_ago": "منذ {{count}} يوم",
+    "yesterday": "أمس",
+    "today": "اليوم",
+    "tomorrow": "غداً"
+  },
+
+  "currency": {
+    "symbol": "ر.س",
+    "code": "SAR",
+    "format": "{{amount}} ر.س"
+  },
+
+  "bottom_nav": {
+    "home": "الرئيسية",
+    "categories": "الفئات",
+    "cart": "السلة",
+    "orders": "الطلبات",
+    "profile": "الملف الشخصي"
+  }
+}
