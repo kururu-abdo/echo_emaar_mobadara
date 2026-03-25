@@ -3,6 +3,7 @@ import 'package:echoemaar_commerce/config/themes/theme_context.dart';
 import 'package:echoemaar_commerce/core/utilities/size_utils.dart';
 import 'package:echoemaar_commerce/core/utilities/typography_utils.dart';
 import 'package:echoemaar_commerce/core/utilities/validators.dart';
+import 'package:echoemaar_commerce/core/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -10,197 +11,222 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../bloc/auth_bloc.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/international_phone_input.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:echoemaar_commerce/config/themes/theme_context.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import '../bloc/auth_bloc.dart';
+// import '../widgets/app_button.dart'; // The scaling button we built
+import 'package:easy_localization/easy_localization.dart';
+import 'package:echoemaar_commerce/config/themes/theme_context.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import '../bloc/auth_bloc.dart';
+// import '../widgets/app_button.dart'; // The scaling button with primary gradient
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-  
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _phoneController = TextEditingController();
-  
-  String _phoneNumber = '';
-  String _countryCode = '+1';
-  
-  @override
-  void dispose() {
-    _phoneController.dispose();
-    super.dispose();
-  }
-  
-  void _onPhoneNumberChanged(PhoneNumber number) {
-    setState(() {
-      _phoneNumber = number.phoneNumber ?? '';
-      _countryCode = number.dialCode ?? '+1';
-    });
-  }
-  
-  void _handleSendOtp() {
-    if (_formKey.currentState!.validate()) {
-      // context.read<AuthBloc>().add(LoginWithEmailEvent(
-      //   context,
-      //   _emailController.text.trim(),_passwordController.text.trim()));
-
-   context.read<AuthProvider>().login(context,
-        _emailController.text.trim(),_passwordController.text.trim());
-
-    }
-  }
-  
-  final TextEditingController  _emailController = TextEditingController();
-
-  final TextEditingController  _passwordController = TextEditingController();
-
+  final _emailController = TextEditingController(); // Updated to match design
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors; //
+
     return Scaffold(
-      body: SafeArea(
-        child: BlocListener<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is OtpSent) {
-              // Navigate to OTP verification
-              Navigator.of(context).pushNamed(
-                '/otp-verification',
-                arguments: state.phoneNumber,
-              );
-            } else if (state is AuthError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: context.colors.error,
+      backgroundColor: colors.background, //
+      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
+      body: SingleChildScrollView(
+        padding: context.spacing.pagePadding(context), //
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // 1. Title
+              Text(
+                'Login',
+                style: context.textTheme.displaySmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: colors.textPrimary, //
                 ),
-              );
-            }
-          },
-          child: SingleChildScrollView(
-            padding: context.spacing.pagePadding(context),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(height: context.heightPercent(10)),
-                  
-                  // Logo
-                  Icon(
-                    Icons.shopping_bag,
-                    size: 100,
-                    color: context.colors.primary,
-                  ),
-                  
-                  context.spacing.verticalXL,
-                  
-                  Text(
-                   'auth.welcome_back'.tr()
-                    // 'Welcome Back'
-                    ,
-                    style: TextStyles.h1(context),
-                    textAlign: TextAlign.center,
-                  ),
-                  
-                  context.spacing.verticalSM,
-                  
-                  Text(
-                    'Sign in with your phone number',
-                    style: TextStyles.bodyMedium(context).copyWith(
-                      color: context.colors.textSecondary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  
-                  context.spacing.verticalXXL,
-                
-                  // Phone Number Input
-
-                  /*
-                  InternationalPhoneInput(
-                    controller: _phoneController,
-                    onInputChanged: _onPhoneNumberChanged,
-                    initialCountryCode: 'SA',
-                    validator: (value) => Validators.validateInternationalPhone(
-                      value,
-                      _countryCode,
-                    ),
-                  ),
-                  */
-
-TextFormField(
-  controller: _emailController,
-decoration:  InputDecoration(
-  hintText: 'auth.email'.tr(), 
-  
-),
-// validator:(value)=> Validators.validateEmail(value),
-), 
-
-
-    context.spacing.verticalMD,
-TextFormField(
-  controller: _passwordController,
-  obscureText: true,
-  validator:(value)=> Validators.validateRequired(value,'Password'),
-decoration:  InputDecoration(
-  hintText:  'auth.password'.tr(), 
-  
-),
-), 
-
-                  context.spacing.verticalXL,
-                  
-                  // Send OTP Button
-                  BlocBuilder<AuthBloc, AuthState>(
-                    builder: (context, state) {
-                      final isLoading = context.read<AuthProvider>().isLoading;
-                      
-                      return SizedBox(
-                        height: context.buttonHeight(),
-                        child: ElevatedButton(
-                          onPressed: isLoading ? null : _handleSendOtp,
-                          child: isLoading
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white,
-                                    ),
-                                  ),
-                                )
-                              :  Text( 'auth.login'.tr(), ),
-                        ),
-                      );
-                    },
-                  ),
-                  
-                  context.spacing.verticalXL,
-                  
-                  // Create Account
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                       'auth.dont_have_account'.tr(),
-                        style: TextStyles.bodyMedium(context),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                        context.goNamed('/register');
-                        },
-                        child:  Text('auth.create_account'.tr()),
-                      ),
-                    ],
-                  ),
-                ],
+                textAlign: TextAlign.center,
               ),
-            ),
+              const SizedBox(height: 48),
+
+              // 2. Email Field
+              _buildLabel('Email'),
+              _buildOutlinedField(
+                controller: _emailController,
+                hint: 'example@gmail.com',
+                keyboardType: TextInputType.emailAddress,
+              ),
+
+              const SizedBox(height: 20),
+
+              // 3. Password Field
+              _buildLabel('Password'),
+              _buildOutlinedField(
+                controller: _passwordController,
+                hint: '••••••••••••',
+                isPassword: true,
+              ),
+
+              const SizedBox(height: 32),
+
+              // 4. Scaling Login Button
+              AppButton(
+                label: 'Login',
+                onTap: () {
+                  if (_formKey.currentState!.validate()) {
+                    // Execute login logic via Bloc
+                  }
+                },
+              ),
+
+              const SizedBox(height: 24),
+
+              // 5. Forget Password
+              Center(
+                child: TextButton(
+                  onPressed: () {}, // Navigate to Forget Password
+                  child: Text(
+                    'Forget Password?',
+                    style: TextStyle(
+                      color: colors.primary, //
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+              _buildSocialDivider(),
+              const SizedBox(height: 24),
+
+              // 6. Social Buttons
+              _buildSocialButton(Icons.g_mobiledata, 'Continue with Google', Colors.white, Colors.black),
+              const SizedBox(height: 16),
+              _buildSocialButton(Icons.apple, 'Continue with Apple', Colors.black, Colors.white),
+              const SizedBox(height: 16),
+              _buildSocialButton(Icons.person_outline, 'Continue as Guest', Colors.white, Colors.black),
+
+              const SizedBox(height: 48),
+
+              // 7. Footer Redirect
+              _buildRegisterRedirect(),
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  // --- Helper Widgets ---
+
+  Widget _buildLabel(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0, left: 4),
+      child: Text(
+        text, 
+        style: context.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _buildOutlinedField({
+    required TextEditingController controller,
+    required String hint,
+    bool isPassword = false,
+    TextInputType? keyboardType,
+  }) {
+    return TextFormField(
+      controller: controller,
+      obscureText: isPassword,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        hintText: hint,
+        suffixIcon: isPassword ? const Icon(Icons.visibility_off_outlined, size: 20) : null,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12), //
+          borderSide: BorderSide(color: context.colors.border), //
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSocialDivider() {
+    return Row(
+      children: [
+        Expanded(child: Divider(color: context.colors.border)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text('Or sign up with', style: TextStyle(color: context.colors.textSecondary)),
+        ),
+        Expanded(child: Divider(color: context.colors.border)),
+      ],
+    );
+  }
+
+  Widget _buildSocialButton(IconData icon, String label, Color bgColor, Color textColor) {
+    return Container(
+      height: 56,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: OutlinedButton(
+        onPressed: () {},
+        style: OutlinedButton.styleFrom(
+          backgroundColor: bgColor,
+          foregroundColor: textColor,
+          side: BorderSide(color: context.colors.border),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 24),
+            const SizedBox(width: 12),
+            Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRegisterRedirect() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("Don't have an account? ", style: context.textTheme.bodyMedium),
+        GestureDetector(
+          onTap: () => context.goNamed('/register'),
+          child: Text(
+            'Sign up',
+            style: context.textTheme.bodyMedium!.copyWith(
+              color: context.colors.primary,
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

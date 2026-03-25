@@ -342,6 +342,31 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       ),
     );
   }
+
+
+
+
+  Widget _buildOtpHeader(BuildContext context) {
+  return Column(
+    children: [
+      const SizedBox(height: 40),
+      // The Architectural Container for the Lock Icon
+      Container(
+        height: 100, width: 100,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: context.colors.primaryLight.withOpacity(0.2)),
+          gradient: RadialGradient(colors: [context.colors.primary.withOpacity(0.2), Colors.transparent]),
+        ),
+        child: Icon(Icons.mark_email_unread_outlined, size: 40, color: context.colors.primaryLight),
+      ),
+      const SizedBox(height: 32),
+      Text('Verify Code', style: context.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
+      const SizedBox(height: 12),
+      Text('Enter the 6-digit code sent to your phone', textAlign: TextAlign.center, style: context.textTheme.bodyMedium),
+    ],
+  );
+}
 }
 
 // ── Single OTP box ─────────────────────────────────────────────────────────
@@ -367,7 +392,33 @@ class _OtpBox extends StatelessWidget {
     final shapes = context.shapes;
     final isFocused = focusNode.hasFocus;
 
-    return SizedBox(
+    return 
+    
+     Container(
+      width: 50, height: 65,
+      decoration: BoxDecoration(
+        boxShadow: [
+          if (focusNode.hasFocus) 
+            BoxShadow(color: context.colors.primary.withOpacity(0.1), blurRadius: 15)
+        ],
+      ),
+      child: TextField(
+        // ... same logic
+        decoration: InputDecoration(
+          fillColor: focusNode.hasFocus ? context.colors.primary.withOpacity(0.05) : context.colors.surface,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: hasError ? context.colors.error : context.colors.border),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: context.colors.primary, width: 2),
+          ),
+        ),
+      ),
+    );
+    
+    SizedBox(
       width: 46,
       height: 56,
       child: RawKeyboardListener(

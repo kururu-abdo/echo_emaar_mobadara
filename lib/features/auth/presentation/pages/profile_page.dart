@@ -1,4 +1,5 @@
 import 'package:echoemaar_commerce/config/themes/theme_context.dart';
+import 'package:echoemaar_commerce/core/utilities/extensions.dart';
 import 'package:echoemaar_commerce/core/utilities/size_utils.dart';
 import 'package:echoemaar_commerce/core/utilities/typography_utils.dart';
 import 'package:echoemaar_commerce/features/invoice/presentation/pages/invoice_page.dart';
@@ -335,6 +336,86 @@ class _ProfileView extends StatelessWidget {
       ),
     );
   }
+Widget _buildCircularAvatar(BuildContext context) {
+  final colors = context.colors; //
+  
+  return Container(
+    padding: const EdgeInsets.all(4), // Space for the outer white border
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      border: Border.all(color: Colors.white.withOpacity(0.8), width: 2),
+      boxShadow: [
+        BoxShadow(
+          color: colors.primaryGlow, // rgba(29, 111, 164, 0.18)
+          blurRadius: 20,
+          spreadRadius: 5,
+        ),
+      ],
+    ),
+    child: CircleAvatar(
+      radius: 50,
+      backgroundColor: colors.surface, //
+      // Use the user entity we established in the profile page
+      child: Text(
+        user.username[0].toUpperCase(),
+        style: TextStyle(
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
+          color: colors.primary, //
+        ),
+      ),
+      // To add the actual image later:
+      // backgroundImage: user.imageUrl != null ? NetworkImage(user.imageUrl!) : null,
+    ),
+  );
+}
+
+
+  // Inside _ProfileView build
+Widget _buildLuxuryHeader(BuildContext context) {
+  final colors = context.colors;
+  return SliverAppBar(
+    expandedHeight: 260,
+    flexibleSpace: FlexibleSpaceBar(
+      background: Stack(
+        children: [
+          // Background Gradient
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [Color(0xFF162D45), Color(0xFF081525)],
+              ),
+            ),
+          ),
+          // Radial Glow
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: RadialGradient(
+                center: const Alignment(0, -0.5),
+                radius: 1.0,
+                colors: [colors.primary.withOpacity(0.15), Colors.transparent],
+              ).toDecoration(),
+            ),
+          ),
+          // Profile Details
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildCircularAvatar(context),
+                const SizedBox(height: 16),
+                Text(user.username, style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                Text(user.email, style: TextStyle(color: Colors.white.withOpacity(0.7))),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────
