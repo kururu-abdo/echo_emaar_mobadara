@@ -241,9 +241,14 @@ log(success.toString());
     // Based on your new pattern, your products are in 'data'
     return decodedBody; 
   } else {
+    log('DECODED BODy $decodedBody');
     // Extract error from the new pattern
-    final String errorMessage = decodedBody['message'] ?? 
+    final String errorMessage =
+    
+     decodedBody['result']['message'] ?? 
+     decodedBody['message'] ?? 
                                 decodedBody['error'] ?? 
+
                                 'Operation failed on server';
     log('API BUSINESS ERROR: $errorMessage');
     throw ServerException(errorMessage);

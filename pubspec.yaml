@@ -32,10 +32,10 @@ dependencies:
   shared_preferences: ^2.2.2
 
   # Firebase (Optional - for push notifications, analytics)
-  firebase_core: ^2.20.0
-  firebase_auth: ^4.12.1
-  firebase_messaging: ^14.7.3
-  firebase_analytics: ^10.7.0
+  # firebase_core: ^2.20.0
+  # firebase_auth: ^4.12.1
+  # firebase_messaging: ^14.7.3
+  # firebase_analytics: ^10.7.0
 
   # Image Handling
   cached_network_image: ^3.3.0

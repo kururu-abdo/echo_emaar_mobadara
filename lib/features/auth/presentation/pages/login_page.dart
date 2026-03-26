@@ -1,13 +1,18 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:echoemaar_commerce/config/themes/theme_context.dart';
 import 'package:echoemaar_commerce/core/utilities/size_utils.dart';
 import 'package:echoemaar_commerce/core/utilities/typography_utils.dart';
 import 'package:echoemaar_commerce/core/utilities/validators.dart';
 import 'package:echoemaar_commerce/core/widgets/custom_button.dart';
+import 'package:echoemaar_commerce/features/auth/presentation/pages/register_page.dart';
+import 'package:echoemaar_commerce/features/home/presentation/pages/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:provider/provider.dart';
 import '../bloc/auth_bloc.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/international_phone_input.dart';
@@ -41,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors; //
-
+var authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       backgroundColor: colors.background, //
       appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
@@ -86,9 +91,10 @@ class _LoginPageState extends State<LoginPage> {
               // 4. Scaling Login Button
               AppButton(
                 label: 'Login',
+                isLoading: authProvider.isLoading,
                 onTap: () {
                   if (_formKey.currentState!.validate()) {
-                    // Execute login logic via Bloc
+                   authProvider.login(context, _emailController.text.trim(), _passwordController.text.trim());
                   }
                 },
               ),
@@ -98,7 +104,12 @@ class _LoginPageState extends State<LoginPage> {
               // 5. Forget Password
               Center(
                 child: TextButton(
-                  onPressed: () {}, // Navigate to Forget Password
+                  onPressed: () {
+
+
+
+
+                  }, // Navigate to Forget Password
                   child: Text(
                     'Forget Password?',
                     style: TextStyle(
@@ -114,11 +125,16 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 24),
 
               // 6. Social Buttons
-              _buildSocialButton(Icons.g_mobiledata, 'Continue with Google', Colors.white, Colors.black),
-              const SizedBox(height: 16),
-              _buildSocialButton(Icons.apple, 'Continue with Apple', Colors.black, Colors.white),
-              const SizedBox(height: 16),
-              _buildSocialButton(Icons.person_outline, 'Continue as Guest', Colors.white, Colors.black),
+              // _buildSocialButton(Icons.g_mobiledata, 'Continue with Google', Colors.white, Colors.black),
+              // const SizedBox(height: 16),
+              // _buildSocialButton(Icons.apple, 'Continue with Apple', Colors.black, Colors.white),
+              // const SizedBox(height: 16),
+              _buildSocialButton(Icons.person_outline, 'Continue as Guest', Colors.white, Colors.black ,  onTap:(){
+
+
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> const Dashboard()), (_)=> false);
+
+              }),
 
               const SizedBox(height: 48),
 
@@ -178,33 +194,41 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildSocialButton(IconData icon, String label, Color bgColor, Color textColor) {
-    return Container(
-      height: 56,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: OutlinedButton(
-        onPressed: () {},
-        style: OutlinedButton.styleFrom(
-          backgroundColor: bgColor,
-          foregroundColor: textColor,
-          side: BorderSide(color: context.colors.border),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 24),
-            const SizedBox(width: 12),
-            Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+  Widget _buildSocialButton(IconData icon, String label, Color bgColor, Color textColor ,{ 
+    Function? onTap
+  }) {
+    return GestureDetector(
+      onTap: (){
+        log('route');
+        onTap!();
+      },
+      child: Container(
+        height: 56,
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
           ],
+        ),
+        child: OutlinedButton(
+          onPressed: () {},
+          style: OutlinedButton.styleFrom(
+            backgroundColor: bgColor,
+            foregroundColor: textColor,
+            side: BorderSide(color: context.colors.border),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 24),
+              const SizedBox(width: 12),
+              Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            ],
+          ),
         ),
       ),
     );
@@ -216,7 +240,9 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         Text("Don't have an account? ", style: context.textTheme.bodyMedium),
         GestureDetector(
-          onTap: () => context.goNamed('/register'),
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> const RegisterPage()));
+          },
           child: Text(
             'Sign up',
             style: context.textTheme.bodyMedium!.copyWith(

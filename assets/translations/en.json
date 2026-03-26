@@ -497,5 +497,19 @@
     "cart": "Cart",
     "orders": "Orders",
     "profile": "Profile"
+  }, 
+
+  "settings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "dark_mode": "Dark Mode",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "language": "Language",
+    "select_language": "Select Language",
+    "about": "About",
+    "version": "App Version",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
   }
 }

@@ -3,11 +3,13 @@ import 'package:echoemaar_commerce/core/utilities/size_utils.dart';
 import 'package:echoemaar_commerce/core/utilities/typography_utils.dart';
 import 'package:echoemaar_commerce/core/utilities/validators.dart';
 import 'package:echoemaar_commerce/core/widgets/custom_button.dart';
+import 'package:echoemaar_commerce/features/auth/presentation/providers/auth_provider.dart';
 import 'package:echoemaar_commerce/features/auth/presentation/widgets/auth_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:provider/provider.dart';
 import '../bloc/auth_bloc.dart';
 import '../widgets/international_phone_input.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -39,97 +41,100 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors; //
+var authProvider = Provider.of<AuthProvider>(context);
 
     return Scaffold(
       backgroundColor: colors.background, //
       appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
-      body: SingleChildScrollView(
-        padding: context.spacing.pagePadding(context), //
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Create Account',
-                style: context.textTheme.displaySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: colors.textPrimary,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: context.spacing.pagePadding(context), //
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Create Account',
+                  style: context.textTheme.displaySmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: colors.textPrimary,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Fill your information below or register with your social account.',
-                style: context.textTheme.bodyMedium, //
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 32),
-
-              // 1. Name Field (Outlined)
-              _buildLabel('Name'),
-              _buildOutlinedField(
-                controller: _nameController,
-                hint: 'Krish Shah',
-                validator: (v) => v!.isEmpty ? 'Name is required' : null,
-              ),
-
-              const SizedBox(height: 20),
-
-              // 2. Phone Number Field (Required with Country Picker)
-              _buildLabel('Phone Number'),
-              _buildPhoneInput(context),
-
-              const SizedBox(height: 20),
-
-              // 3. Email Field (Optional)
-              _buildLabel('Email (Optional)'),
-              _buildOutlinedField(
-                controller: _emailController,
-                hint: 'example@gmail.com',
-                keyboardType: TextInputType.emailAddress,
-              ),
-
-              const SizedBox(height: 20),
-
-              // 4. Password Fields
-              _buildLabel('Password'),
-              _buildOutlinedField(
-                controller: _passwordController,
-                hint: '••••••••••••',
-                isPassword: true,
-              ),
-
-              const SizedBox(height: 20),
-
-              _buildLabel('Confirm Password'),
-              _buildOutlinedField(
-                controller: _confirmPasswordController,
-                hint: '••••••••••••',
-                isPassword: true,
-                validator: (v) => v != _passwordController.text ? 'Passwords do not match' : null,
-              ),
-
-              const SizedBox(height: 32),
-
-              // 5. Scaling Sign Up Button
-              AppButton(
-                label: 'Sign up',
-                onTap: _handleSignUp,
-              ),
-
-              const SizedBox(height: 24),
-              _buildSocialDivider(),
-              const SizedBox(height: 24),
-
-              // 6. Social Buttons
-              _buildSocialButton(Icons.g_mobiledata, 'Continue with Google', Colors.white, Colors.black),
-              const SizedBox(height: 16),
-              _buildSocialButton(Icons.apple, 'Continue with Apple', Colors.black, Colors.white),
-
-              const SizedBox(height: 32),
-              _buildLoginRedirect(),
-            ],
+                const SizedBox(height: 8),
+                Text(
+                  'Fill your information below or register with your social account.',
+                  style: context.textTheme.bodyMedium, //
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+        
+                // 1. Name Field (Outlined)
+                _buildLabel('Name'),
+                _buildOutlinedField(
+                  controller: _nameController,
+                  hint: 'Krish Shah',
+                  validator: (v) => v!.isEmpty ? 'Name is required' : null,
+                ),
+        
+                const SizedBox(height: 20),
+        
+                // 2. Phone Number Field (Required with Country Picker)
+                _buildLabel('Phone Number'),
+                _buildPhoneInput(context),
+        
+                const SizedBox(height: 20),
+        
+                // 3. Email Field (Optional)
+                _buildLabel('Email (Optional)'),
+                _buildOutlinedField(
+                  controller: _emailController,
+                  hint: 'example@gmail.com',
+                  keyboardType: TextInputType.emailAddress,
+                ),
+        
+                const SizedBox(height: 20),
+        
+                // 4. Password Fields
+                _buildLabel('Password'),
+                _buildOutlinedField(
+                  controller: _passwordController,
+                  hint: '••••••••••••',
+                  isPassword: true,
+                ),
+        
+                const SizedBox(height: 20),
+        
+                _buildLabel('Confirm Password'),
+                _buildOutlinedField(
+                  controller: _confirmPasswordController,
+                  hint: '••••••••••••',
+                  isPassword: true,
+                  validator: (v) => v != _passwordController.text ? 'Passwords do not match' : null,
+                ),
+        
+                const SizedBox(height: 32),
+        
+                // 5. Scaling Sign Up Button
+                AppButton(
+                  label: 'Sign up',
+                  onTap: _handleSignUp,
+                ),
+        
+                const SizedBox(height: 24),
+                // _buildSocialDivider(),
+                // const SizedBox(height: 24),
+        
+                // // 6. Social Buttons
+                // _buildSocialButton(Icons.g_mobiledata, 'Continue with Google', Colors.white, Colors.black),
+                // const SizedBox(height: 16),
+                // _buildSocialButton(Icons.apple, 'Continue with Apple', Colors.black, Colors.white),
+        
+                // const SizedBox(height: 32),
+                _buildLoginRedirect(),
+              ],
+            ),
           ),
         ),
       ),

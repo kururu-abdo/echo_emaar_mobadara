@@ -319,7 +319,7 @@ class _SplashPageState extends State<SplashPage>  with SingleTickerProviderState
     if (authState) {
       // User is logged in, go to dashboard
       // context.goNamed(RouteNames.dashboard);
-      Navigator.pushNamed(context,RouteNames.dashboard);
+      Navigator.pushNamed(context,RouteNames.login);
   //     Navigator.of(context).push(
   // MaterialPageRoute(
   //   builder: (_) =>  ProductListPage(),

@@ -74,101 +74,131 @@ class _LoadedDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final product = state.product;
-
+    final spacing = context.spacing;
     return Scaffold(
       backgroundColor: colors.background,
-      body: CustomScrollView(
-        slivers: [
-          // ── Immersive Header ──────────────────────────────
-          SliverAppBar(
-            expandedHeight: 450, // Larger hero area as seen in design
-            pinned: true,
-            stretch: true,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-              onPressed: () => context.pop(),
-            ),
-            title: const Text('Product Details', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-            centerTitle: true,
-            flexibleSpace: FlexibleSpaceBar(
-              stretchModes: const [StretchMode.zoomBackground],
-              background: Stack(
-                fit: StackFit.expand,
-                children: [
-                  _ImageGallery(images: [product.imageUrl ?? '']),
-                  // Dark gradient overlay for text readability
-                  const DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.black38, Colors.transparent, Colors.black45],
+      body: SafeArea(
+        bottom: true,
+        top: false,
+        child: CustomScrollView(
+          slivers: [
+            // ── Immersive Header ──────────────────────────────
+            SliverAppBar(
+              expandedHeight: 450, // Larger hero area as seen in design
+              pinned: true,
+              stretch: true,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                onPressed: () => context.pop(),
+              ),
+              title:  Text('products.product_details'.tr(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              centerTitle: true,
+              flexibleSpace: FlexibleSpaceBar(
+                stretchModes: const [StretchMode.zoomBackground],
+                background: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    _ImageGallery(images: [product.imageUrl ?? '']),
+                    // Dark gradient overlay for text readability
+                    const DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.black38, Colors.transparent, Colors.black45],
+                        ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+            ),
+        const SliverToBoxAdapter(
+          child:   Column(
+            children: [
+              
+        
+            ],
+          )
+        
+        ),
+            // ── Content Panel ──────────────────────────────────
+            SliverToBoxAdapter(
+              child: Transform.translate(
+                offset: const Offset(0, -30), // Pulls the card up over the image
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: colors.surface,
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -5)),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          ),
-
-          // ── Content Panel ──────────────────────────────────
-          SliverToBoxAdapter(
-            child: Transform.translate(
-              offset: const Offset(0, -30), // Pulls the card up over the image
-              child: Container(
-                decoration: BoxDecoration(
-                  color: colors.surface,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-                  boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -5)),
-                  ],
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Title & Favorite Row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            product.name,
-                            style: context.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title & Favorite Row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              product.name,
+                              style: context.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        ),
-                        _buildFavoriteButton(context, product.id),
-                      ],
+                          _buildFavoriteButton(context, product.id),
+                        ],
+                      ),
+                      
+                      const SizedBox(height: 8),
+                      _buildRatingRow(context, 4.5, 468), // Placeholder ratings
+                      
+                      const Divider(height: 40),
+        
+                      const _SectionLabel(label: 'Description'),
+                      const SizedBox(height: 12),
+                      _ExpandableDescription(description: product.name), // Replace with actual description field
+        
+                      const SizedBox(height: 24),
+                      const _SectionLabel(label: 'Select Color : Black'),
+                      const SizedBox(height: 12),
+                      // _buildColorSelector(context),
+                      _SectionLabel(label: 'Quantity'),
+                    spacing.verticalSM,
+                    _QuantitySelector(
+                      quantity: state.quantity,
+                      maxStock: product.qtyAvailable,
+                      // maxStock: state.selectedVariant?.stock ?? product.stock,
+                      onChanged: (q) {
+                        log(q.toString());
+                        context
+                          .read<ProductDetailBloc>()
+                          .add(UpdateQuantityEvent(q));
+
+                      },
                     ),
-                    
-                    const SizedBox(height: 8),
-                    _buildRatingRow(context, 4.5, 468), // Placeholder ratings
-                    
-                    const Divider(height: 40),
-
-                    const _SectionLabel(label: 'Description'),
-                    const SizedBox(height: 12),
-                    _ExpandableDescription(description: product.name), // Replace with actual description field
-
-                    const SizedBox(height: 24),
-                    const _SectionLabel(label: 'Select Color : Black'),
-                    const SizedBox(height: 12),
-                    _buildColorSelector(context),
-
-                    const SizedBox(height: 32),
-                    const _SectionLabel(label: 'Related Products'),
-                    const SizedBox(height: 16),
-                    _RelatedProducts(
-                      products: state.relatedProducts,
-                      onProductTap: (id) => context.pushNamed('/product-detail/$id'),
-                    ),
-                    const SizedBox(height: 100), // Space for bottom bar
-                  ],
+        
+        
+                      const SizedBox(height: 32),
+                      const _SectionLabel(label: 'Related Products'),
+                      const SizedBox(height: 16),
+                      _RelatedProducts(
+                        products: state.relatedProducts,
+                        onProductTap: (id) => context.pushNamed('/product-detail/$id'),
+                      ),
+                      const SizedBox(height: 100), // Space for bottom bar
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+
+
+          
+          ],
+        ),
       ),
       bottomNavigationBar: _BottomActions(state: state),
     );
@@ -181,8 +211,14 @@ class _LoadedDetail extends StatelessWidget {
         border: Border.all(color: context.colors.border),
       ),
       child: IconButton(
-        icon: const Icon(Icons.favorite_border_rounded, size: 22),
-        onPressed: () {}, // Cubit toggle logic
+        icon:  Icon(
+           context.read<FavoritesCubit>().isFavorite(id)? Icons.favorite:
+          Icons.favorite_border_rounded, size: 22),
+          color:context.read<FavoritesCubit>().isFavorite(id)?Colors.red: null,
+        onPressed: () {
+
+          context.read<FavoritesCubit>().toggle(id);
+        }, // Cubit toggle logic
       ),
     );
   }
@@ -589,7 +625,7 @@ class _BottomActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final total = state.effectivePrice * state.quantity;
-
+final canBuy = state.product.qtyAvailable > 0;
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
       decoration: BoxDecoration(
@@ -617,9 +653,25 @@ class _BottomActions extends StatelessWidget {
             child: AppButton(
               label: 'Add To Cart',
               icon: Icons.shopping_bag_outlined,
-              onTap: () {
-                // Cart Logic
-              },
+              onTap: 
+             canBuy
+                  ? () {
+                      context.read<CartBloc>().add(AddToCartEvent(
+                            productId: state.product.id,
+                            variantId: state.product.id,
+                            quantity: state.quantity, productName:state.product.name, unitPrice: state.product.listPrice,
+                          ));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content:  Text(context.tr('added_to_cart')),
+                          backgroundColor: colors.success,
+                          behavior: SnackBarBehavior.floating,
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    }
+                  : null,
+              
             ),
           ),
         ],

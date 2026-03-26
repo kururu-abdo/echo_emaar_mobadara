@@ -1,4 +1,5 @@
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:echoemaar_commerce/config/themes/theme_context.dart';
 import 'package:echoemaar_commerce/core/utilities/typography_utils.dart';
 import 'package:flutter/material.dart';
@@ -21,14 +22,14 @@ class SettingsPage extends StatelessWidget {
         padding: context.spacing.pagePadding(context),
         children: [
           // Theme Section
-          _buildSectionHeader(context, 'Appearance'),
+          _buildSectionHeader(context, 'settings.appearance'.tr()),
           Card(
             child: Column(
               children: [
                 SwitchListTile(
-                  title: const Text('Dark Mode'),
+                  title:  Text( 'settings.dark_mode'.tr()),
                   subtitle: Text(
-                    themeProvider.isDarkMode ? 'Enabled' : 'Disabled',
+                    themeProvider.isDarkMode ? 'settings.enabled'.tr() : 'settings.disabled'.tr(),
                   ),
                   value: themeProvider.isDarkMode,
                   onChanged: (value) {
@@ -49,6 +50,19 @@ class SettingsPage extends StatelessWidget {
                   leading: const Icon(Icons.palette),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => _showThemeModeDialog(context, themeProvider),
+                ),
+
+                const Divider(height: 1),
+
+                // Language Selector [NEW]
+                ListTile(
+                  title: Text('settings.language'.tr()),
+                  subtitle: Text(
+                    context.locale.languageCode == 'ar' ? 'العربية' : 'English',
+                  ),
+                  leading: Icon(Icons.language, color: context.colors.primary),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => _showLanguageDialog(context),
                 ),
               ],
             ),
@@ -85,7 +99,7 @@ class SettingsPage extends StatelessWidget {
           ],
           
           // App Info Section
-          _buildSectionHeader(context, 'About'),
+          _buildSectionHeader(context, 'settings.about'.tr()),
           Card(
             child: Column(
               children: [
@@ -227,6 +241,68 @@ class SettingsPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+// --- Language Selection Dialog ---
+  void _showLanguageDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('settings.select_language'.tr()),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(context.shapes.borderRadiusMedium), //
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _LanguageOption(
+              title: 'العربية',
+              isSelected: context.locale.languageCode == 'ar',
+              onTap: () {
+                context.setLocale(const Locale('ar')); //
+                Navigator.pop(context);
+              },
+            ),
+            const Divider(),
+            _LanguageOption(
+              title: 'English',
+              isSelected: context.locale.languageCode == 'en',
+              onTap: () {
+                context.setLocale(const Locale('en'));
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+}
+
+
+
+
+class _LanguageOption extends StatelessWidget {
+  final String title;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _LanguageOption({
+    required this.title,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+      trailing: isSelected 
+          ? Icon(Icons.check_circle, color: context.colors.primary) 
+          : null,
+      onTap: onTap,
     );
   }
 }

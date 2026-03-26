@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:echoemaar_commerce/config/routes/route_names.dart';
+import 'package:echoemaar_commerce/core/widgets/app_toast.dart';
 import 'package:echoemaar_commerce/features/auth/domain/repositories/auth_repository.dart';
 import 'package:echoemaar_commerce/features/auth/domain/usecases/get_current_user.dart';
 import 'package:echoemaar_commerce/features/auth/domain/usecases/login_with_email.dart';
@@ -44,8 +45,10 @@ final result = await loginWithEmail(LoginWithEmailParams(email: email, password:
         log('LOGIN FAILED $failure');
   _isLoading= false;
       notifyListeners();
+ToastUtils.show(context, failure.message , type: ToastType.error);     
 
-      },
+
+ },
       (_) {
        log('SUCCESS Login');
         // context.pushReplacementNamed(RouteNames.home);
@@ -65,7 +68,7 @@ return const Dashboard();
       notifyListeners();
       
     }finally{
-        _isLoading= true;
+        _isLoading= false;
       notifyListeners();
     }
   }

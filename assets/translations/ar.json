@@ -498,5 +498,20 @@
     "cart": "السلة",
     "orders": "الطلبات",
     "profile": "الملف الشخصي"
+  }, 
+
+"settings": {
+    "title": "الإعدادات",
+    "appearance": "المظهر",
+    "dark_mode": "الوضع الليلي",
+    "enabled": "مفعل",
+    "disabled": "معطل",
+    "language": "اللغة",
+    "select_language": "اختر اللغة",
+    "about": "حول التطبيق",
+    "version": "إصدار التطبيق",
+    "privacy": "سياسة الخصوصية",
+    "terms": "شروط الخدمة"
   }
+  
 }

@@ -3,7 +3,6 @@ import 'package:echoemaar_commerce/features/checkout/data/models/order_item_mode
 import 'package:echoemaar_commerce/features/checkout/domain/entities/order_dtails.dart';
 import 'package:echoemaar_commerce/features/orders/presentation/providers/order_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class OrderDetailsPage extends StatefulWidget {
@@ -15,19 +14,24 @@ class OrderDetailsPage extends StatefulWidget {
 }
 
 class _OrderDetailsPageState extends State<OrderDetailsPage> {
-@override
-void initState() {
-  super.initState();
-  Provider.of<OrderProvider>(context, listen: false).fetchOrderDetails(widget.order);
-
-}
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<OrderProvider>(context, listen: false).fetchOrderDetails(widget.order);
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
     return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
+      appBar: AppBar(
+        title: Text(context.tr('Track Order')),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: theme.colorScheme.surface,
+      ),
       body: Consumer<OrderProvider>(
         builder: (context, provider, child) {
           final order = provider.currentOrder;
@@ -40,149 +44,379 @@ void initState() {
             return Center(child: Text(context.tr('order_not_found')));
           }
 
-          return CustomScrollView(
-            slivers: [
-              // 1. Modern Header
-              SliverAppBar.large(
-                title: Text(order.name),
-                centerTitle: false,
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.share_outlined),
-                    onPressed: () {}, // Share order details
-                  ),
-                ],
-              ),
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 1. Product Card at Top
+                _buildProductCard(context, order),
 
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      // 2. Status Tracker Card
-                      _buildTrackerCard(context, order),
-                      const SizedBox(height: 24),
+                // 2. Order Details Card
+                _buildOrderDetailsCard(context, order),
 
-                      // 3. Items Section
-                      DetailSection(
-                        title: context.tr('orders.order_items'),
-                        children: order.items.map((item) {
-                          return OrderItemTile(item: item );
-                        }).toList(),
-                      ),
-
-                      // 4. Shipping Address Section
-                      DetailSection(
-                        title: context.tr('checkout.shipping_address'),
-                        children: [
-                          _buildAddressCard(theme, order),
-                        ],
-                      ),
-
-                      // 5. Payment Summary Section
-                      DetailSection(
-                        title: context.tr('checkout.payment_summary'),
-                        children: [
-                          _buildPriceSummary(context, theme, order),
-                        ],
-                      ),
-                      
-                      const SizedBox(height: 40), // Bottom padding
-                    ],
+                // 3. Order Status Section Title
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
+                  child: Text(
+                    context.tr('Order Status'),
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-            ],
+
+                // 4. Vertical Timeline
+                _buildVerticalTimeline(context, order),
+
+                const SizedBox(height: 32),
+              ],
+            ),
           );
         },
       ),
     );
   }
 
-  Widget _buildTrackerCard(BuildContext context, OrderDetail order) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: OrderStatusTracker(currentState: order.deliveryStatus),
-    );
-  }
+  // Product Card with Image, Name, Color, Price
+  Widget _buildProductCard(BuildContext context, OrderDetail order) {
+    final theme = Theme.of(context);
+    final firstItem = order.items.isNotEmpty ? order.items.first : null;
 
-  Widget _buildAddressCard(ThemeData theme, OrderDetail order) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: theme.colorScheme.outlineVariant),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            Icon(Icons.location_on_outlined, color: theme.colorScheme.primary),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(order.address.name, style: theme.textTheme.titleSmall),
-                  Text(
-                    "${order.address.street}, ${order.address.city}, ${order.address.zip}",
-                    style: theme.textTheme.bodySmall,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+    if (firstItem == null) return const SizedBox.shrink();
 
-  Widget _buildPriceSummary(BuildContext context, ThemeData theme, OrderDetail order) {
     return Container(
+      margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withOpacity(0.5),
+        ),
       ),
-      child: Column(
+      child: Row(
         children: [
-          _priceRow(context.tr('subtotal'), "${order.total - order.tax} ${order.currency}", theme),
-          const SizedBox(height: 8),
-          _priceRow(context.tr('tax'), "${order.tax} ${order.currency}", theme),
-          const Divider(height: 24),
-          _priceRow(
-            context.tr('total'), 
-            "${order.total} ${order.currency}", 
-            theme, 
-            isTotal: true
+          // Product Image
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              width: 80,
+              height: 80,
+              color: theme.colorScheme.surfaceContainerHighest,
+              child: firstItem.image != null
+                  ? Image.network(
+                      firstItem.image!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Icon(
+                        Icons.image_outlined,
+                        size: 32,
+                        color: theme.colorScheme.outline,
+                      ),
+                    )
+                  : Icon(
+                      Icons.shopping_bag_outlined,
+                      size: 32,
+                      color: theme.colorScheme.outline,
+                    ),
+            ),
+          ),
+
+          const SizedBox(width: 16),
+
+          // Product Info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  firstItem.name,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Color: ${firstItem.name}', // Replace with actual color if available
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '₹ ${firstItem.priceTotal}*',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _priceRow(String label, String value, ThemeData theme, {bool isTotal = false}) {
+  // Order Details Card
+  Widget _buildOrderDetailsCard(BuildContext context, OrderDetail order) {
+    final theme = Theme.of(context);
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withOpacity(0.5),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            context.tr('Order Details'),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          _buildDetailRow(
+            context,
+            context.tr('Expected Delivery Date'),
+            _formatDate(order.date.add(const Duration(days: 5))),
+            theme,
+          ),
+          const SizedBox(height: 12),
+          _buildDetailRow(
+            context,
+            context.tr('Order ID'),
+            '#${order.name}',
+            theme,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(
+    BuildContext context,
+    String label,
+    String value,
+    ThemeData theme,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: isTotal ? theme.textTheme.titleMedium : theme.textTheme.bodyMedium),
         Text(
-          value, 
-          style: isTotal 
-            ? theme.textTheme.titleLarge?.copyWith(color: theme.colorScheme.primary, fontWeight: FontWeight.bold) 
-            : theme.textTheme.bodyLarge
+          label,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        Text(
+          value,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ],
     );
   }
+
+  String _formatDate(DateTime date) {
+    return DateFormat('d MMM, yyyy').format(date);
+  }
+
+  // Vertical Timeline
+  Widget _buildVerticalTimeline(BuildContext context, OrderDetail order) {
+    final theme = Theme.of(context);
+    
+    final List<TimelineStep> steps = [
+      TimelineStep(
+        title: context.tr('status_placed'),
+        timestamp: _formatDateTime(order.date),
+        isCompleted: true,
+        icon: Icons.check_circle,
+      ),
+      TimelineStep(
+        title: context.tr('status_packed'),
+        timestamp: order.deliveryStatus == 'pending' 
+            ? null 
+            : _formatDateTime(order.date.add(const Duration(hours: 21))),
+        isCompleted: ['confirmed', 'preparing', 'in_transit', 'delivered']
+            .contains(order.deliveryStatus),
+        icon: Icons.inventory_2_outlined,
+      ),
+      TimelineStep(
+        title: context.tr('status_shipped'),
+        timestamp: ['in_transit', 'delivered'].contains(order.deliveryStatus)
+            ? _formatDateTime(order.date.add(const Duration(days: 1, hours: 6)))
+            : null,
+        isCompleted: ['in_transit', 'delivered'].contains(order.deliveryStatus),
+        icon: Icons.local_shipping_outlined,
+      ),
+      TimelineStep(
+        title: context.tr('Out For Delivery'),
+        timestamp: null,
+        isCompleted: false,
+        isExpected: true,
+        expectedDate: _formatExpectedDate(order.date.add(const Duration(days: 4))),
+        icon: Icons.delivery_dining_outlined,
+      ),
+      TimelineStep(
+        title: context.tr('status_delivered'),
+        timestamp: null,
+        isCompleted: order.deliveryStatus == 'delivered',
+        isExpected: order.deliveryStatus != 'delivered',
+        expectedDate: order.deliveryStatus != 'delivered'
+            ? _formatExpectedDate(order.date.add(const Duration(days: 5)))
+            : null,
+        icon: Icons.check_circle_outline,
+      ),
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: steps.asMap().entries.map((entry) {
+          final index = entry.key;
+          final step = entry.value;
+          final isLast = index == steps.length - 1;
+
+          return _buildTimelineItem(
+            context,
+            step,
+            isLast: isLast,
+            theme: theme,
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildTimelineItem(
+    BuildContext context,
+    TimelineStep step, {
+    required bool isLast,
+    required ThemeData theme,
+  }) {
+    final bool isActive = step.isCompleted && !isLast;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Timeline Line & Icon
+        Column(
+          children: [
+            // Icon
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: step.isCompleted
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.surface,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: step.isCompleted
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.outlineVariant,
+                  width: 2,
+                ),
+              ),
+              child: Icon(
+                step.isCompleted ? Icons.check : step.icon,
+                size: 18,
+                color: step.isCompleted
+                    ? theme.colorScheme.onPrimary
+                    : theme.colorScheme.outlineVariant,
+              ),
+            ),
+            
+            // Vertical Line
+            if (!isLast)
+              Container(
+                width: 2,
+                height: 60,
+                color: step.isCompleted
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.outlineVariant.withOpacity(0.3),
+              ),
+          ],
+        ),
+
+        const SizedBox(width: 16),
+
+        // Step Content
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  step.title,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: step.isCompleted ? FontWeight.bold : FontWeight.w500,
+                    color: step.isCompleted
+                        ? theme.colorScheme.onSurface
+                        : theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                if (step.timestamp != null)
+                  Text(
+                    step.timestamp!,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                if (step.isExpected && step.expectedDate != null)
+                  Text(
+                    'Expected By ${step.expectedDate}',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _formatDateTime(DateTime date) {
+    return DateFormat('dd MMM yyyy, h:mm a').format(date);
+  }
+
+  String _formatExpectedDate(DateTime date) {
+    return DateFormat('dd MMM yyyy, h:mm a').format(date);
+  }
 }
 
+// Timeline Step Model
+class TimelineStep {
+  final String title;
+  final String? timestamp;
+  final bool isCompleted;
+  final bool isExpected;
+  final String? expectedDate;
+  final IconData icon;
 
+  TimelineStep({
+    required this.title,
+    this.timestamp,
+    required this.isCompleted,
+    this.isExpected = false,
+    this.expectedDate,
+    required this.icon,
+  });
+}
+
+// Keep existing OrderItemTile and other widgets...
 class DetailSection extends StatelessWidget {
   final String title;
   final List<Widget> children;
@@ -213,215 +447,11 @@ class DetailSection extends StatelessWidget {
   }
 }
 
-
-class OrderStatusTracker extends StatelessWidget {
-  final String currentState;
-
-  const OrderStatusTracker({super.key, required this.currentState});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    // Define the lifecycle of an order
-    final List<Map<String, dynamic>> steps = [
-      {'state': context.tr('orders.pending'), 'icon': Icons.hourglass_empty},
-      {'state': context.tr('orders.confirmed'), 'icon': Icons.assignment_turned_in},
-      {'state': context.tr('orders.preparing'), 'icon': Icons.inventory_2},
-      {'state':context.tr('orders.in_transit'), 'icon': Icons.local_shipping},
-     
-      {'state': context.tr('orders.delivered'), 'icon': Icons.auto_awesome},
-            // {'state':context.tr('orders.partially_delivered'), 'icon': Icons.local_shipping},
-            // {'state':context.tr('orders.canceled'), 'icon': Icons.close},
-
-    
-    ];
-
-    // Calculate current progress index
-    int currentIndex = _getStepIndex(currentState);
-
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            children: List.generate(steps.length, (index) {
-              bool isCompleted = index < currentIndex;
-              bool isActive = index == currentIndex;
-              bool isLast = index == steps.length - 1;
-
-              return Expanded(
-                flex: isLast ? 0 : 1,
-                child: Row(
-                  children: [
-                    // --- The Step Node ---
-                    _buildStepNode(
-                      context,
-                      icon: steps[index]['icon'],
-                      isCompleted: isCompleted,
-                      isActive: isActive,
-                      colorScheme: colorScheme,
-                    ),
-                    
-                    // --- The Connector Line ---
-                    if (!isLast)
-                      Expanded(
-                        child: Container(
-                          height: 3,
-                          decoration: BoxDecoration(
-                            color: isCompleted 
-                                ? colorScheme.primary 
-                                : colorScheme.outlineVariant,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              );
-            }),
-          ),
-        ),
-        const SizedBox(height: 12),
-        // --- Labels Row ---
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: steps.map((step) {
-            int index = steps.indexOf(step);
-            bool isPastOrCurrent = index <= currentIndex;
-            return Expanded(
-              child: Text(
-                context.tr(step['state']), // Using your translation extension
-                textAlign: TextAlign.center,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  fontWeight: isPastOrCurrent ? FontWeight.bold : FontWeight.normal,
-                  color: isPastOrCurrent 
-                      ? colorScheme.onSurface 
-                      : colorScheme.outline,
-                  fontSize: 10,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStepNode(
-    BuildContext context, {
-    required IconData icon,
-    required bool isCompleted,
-    required bool isActive,
-    required ColorScheme colorScheme,
-  }) {
-    return Container(
-      width: 32,
-      height: 32,
-      decoration: BoxDecoration(
-        color: isCompleted 
-            ? colorScheme.primary 
-            : isActive 
-                ? colorScheme.primaryContainer 
-                : colorScheme.surface,
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: (isCompleted || isActive) 
-              ? colorScheme.primary 
-              : colorScheme.outlineVariant,
-          width: 2,
-        ),
-        boxShadow: isActive ? [
-          BoxShadow(
-            color: colorScheme.primary.withOpacity(0.3),
-            blurRadius: 8,
-            spreadRadius: 2,
-          )
-        ] : null,
-      ),
-      child: Icon(
-        isCompleted ? Icons.check : icon,
-        size: 16,
-        color: isCompleted 
-            ? colorScheme.onPrimary 
-            : isActive 
-                ? colorScheme.primary 
-                : colorScheme.outline,
-      ),
-    );
-  }
-
-  int _getStepIndex(String state) {
-    switch (state) {
-      case 'pending': return 0;
-      case 'confirmed': return 1;
-      case 'preparing': return 2;
-      case 'in_transit': return 3;
-      case 'delivered': 
-      case 'partially_delivered': return 4;
-      default: return 0;
-    }
-  }
-}
-
-
 class OrderItemTile extends StatelessWidget {
   final OrderItem item;
 
   const OrderItemTile({super.key, required this.item});
-// Inside your OrderItemTile class
 
-Widget _buildStatusRow(BuildContext context, ThemeData theme) {
-  final bool isPartiallyDelivered = item.quantityDelivered < item.quantity && item.quantityDelivered > 0;
-  final bool isNotFullyDelivered = item.quantityDelivered < item.quantity;
-  
-  // Only show if there's a discrepancy
-  if (item.quantityDelivered == item.quantity && item.quantityInvoiced == item.quantity) {
-    return const SizedBox.shrink();
-  }
-
-  return Padding(
-    padding: const EdgeInsets.only(top: 8.0),
-    child: Row(
-      children: [
-        // 1. Delivery Badge
-        if (isNotFullyDelivered)
-          _buildBadge(
-            label: "${context.tr('delivered')}: ${item.quantityDelivered.toInt()}/${item.quantity.toInt()}",
-            color: Colors.green,
-            theme: theme,
-          ),
-        const SizedBox(width: 8),
-        // 2. Invoiced Badge
-        if (item.quantityInvoiced != item.quantity)
-          _buildBadge(
-            label: "${context.tr('invoiced')}: ${item.quantityInvoiced.toInt()}",
-            color: theme.colorScheme.tertiary,
-            theme: theme,
-          ),
-      ],
-    ),
-  );
-}
-
-Widget _buildBadge({required String label, required Color color, required ThemeData theme}) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-    decoration: BoxDecoration(
-      color: color.withOpacity(0.15),
-      borderRadius: BorderRadius.circular(6),
-      border: Border.all(color: color.withOpacity(0.3)),
-    ),
-    child: Text(
-      label,
-      style: theme.textTheme.labelSmall?.copyWith(
-        color: color,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-  );
-}
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -438,11 +468,8 @@ Widget _buildBadge({required String label, required Color color, required ThemeD
         padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
-            // 1. Product Image with Network Handling
             _buildProductImage(colorScheme),
             const SizedBox(width: 16),
-
-            // 2. Product Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -456,26 +483,16 @@ Widget _buildBadge({required String label, required Color color, required ThemeD
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 6),
-                  
-                  // Shows "Quantity x Price"
                   Text(
-                    "${item.quantityDelivered.toInt()} x ${item.priceUnit}  SAR}",
+                    "${item.quantityDelivered.toInt()} x ${item.priceUnit} SAR",
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: colorScheme.outline,
                     ),
                   ),
-                  const SizedBox(height: 4),
-// Add the new status row here
-
-                  // Delivered Status Badge (if applicable)
                   if (item.quantity > 0) _buildDeliveredBadge(context, theme),
-
-                  // _buildStatusRow(context, theme),
                 ],
               ),
             ),
-
-            // 3. Subtotal Price
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
@@ -503,7 +520,7 @@ Widget _buildBadge({required String label, required Color color, required ThemeD
             ? Image.network(
                 item.image!,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => 
+                errorBuilder: (context, error, stackTrace) =>
                     Icon(Icons.inventory_2_outlined, color: colorScheme.outline),
               )
             : Icon(Icons.inventory_2_outlined, color: colorScheme.outline),
