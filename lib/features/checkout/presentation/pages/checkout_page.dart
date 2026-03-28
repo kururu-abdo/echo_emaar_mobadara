@@ -15,6 +15,7 @@ import 'package:echoemaar_commerce/features/checkout/domain/entities/shipping_ad
 import 'package:echoemaar_commerce/features/checkout/presentation/pages/order_success_page.dart';
 import 'package:echoemaar_commerce/features/checkout/presentation/providers/checkout_provider.dart';
 import 'package:echoemaar_commerce/features/checkout/presentation/widgets/order_summary_section.dart';
+import 'package:echoemaar_commerce/shared/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -25,6 +26,117 @@ import '../../../../injection_container.dart' as di;
 import '../bloc/checkout_bloc.dart';
 import '../widgets/address_selector.dart';
 import '../widgets/payment_method_selector.dart';
+
+// lib/features/checkout/presentation/pages/checkout_page.dart
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:echoemaar_commerce/config/themes/theme_context.dart';
+// استيراد المكونات المحدثة بالأسفل...
+/*
+class CheckoutPage extends StatelessWidget {
+  const CheckoutPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC), // خلفية فاتحة جداً حسب التصميم
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF004D7A)),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('AQUA ARTISAN', 
+              style: TextStyle(color: Color(0xFF004D7A), fontWeight: FontWeight.bold, fontSize: 18)),
+            const SizedBox(width: 8),
+            Icon(Icons.lock_outline, size: 14, color: Colors.grey.shade400),
+            const SizedBox(width: 4),
+            Text('SECURE CHECKOUT', 
+              style: TextStyle(color: Colors.grey.shade400, fontSize: 10, letterSpacing: 1)),
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 1. Shipping Address Section
+            _buildSectionHeader('Shipping Address', onAction: () {}),
+            const SizedBox(height: 12),
+            const _ShippingAddressCard(),
+
+            const SizedBox(height: 32),
+
+            // 2. Delivery Method Section
+            _buildSectionHeader('Delivery Method'),
+            const SizedBox(height: 12),
+            const _DeliveryMethodSelector(),
+
+            const SizedBox(height: 32),
+
+            // 3. Payment Method Section
+            _buildSectionHeader('Payment Method'),
+            const SizedBox(height: 12),
+            const _PaymentMethodTabs(),
+            const SizedBox(height: 16),
+            const _CreditCardForm(),
+
+            const SizedBox(height: 32),
+
+            // 4. Order Summary Section
+            const _OrderSummaryCard(),
+
+            const SizedBox(height: 40),
+            
+            // 5. Secure SSL Encryption Tag
+            const Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.verified_user, size: 14, color: Colors.grey),
+                  SizedBox(width: 8),
+                  Text('SECURE SSL ENCRYPTION ENABLED', 
+                    style: TextStyle(color: Colors.grey, fontSize: 10, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // 6. Support Assistance Box
+            const _SupportAssistanceBox(),
+            
+            const SizedBox(height: 60),
+            // Footer Brand & Rights
+            const _CheckoutFooter(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title, {VoidCallback? onAction}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black)),
+        if (onAction != null)
+          TextButton(
+            onPressed: onAction,
+            child: const Text('Change', style: TextStyle(color: Color(0xFF004D7A), fontWeight: FontWeight.bold)),
+          ),
+      ],
+    );
+  }
+}
+
+*/
 
 class CheckoutPage extends StatelessWidget {
   const CheckoutPage({super.key});
@@ -37,6 +149,410 @@ class CheckoutPage extends StatelessWidget {
     );
   }
 }
+
+
+class _PaymentMethodTabs extends StatefulWidget {
+  const _PaymentMethodTabs();
+
+  @override
+  State<_PaymentMethodTabs> createState() => _PaymentMethodTabsState();
+}
+
+class _PaymentMethodTabsState extends State<_PaymentMethodTabs> {
+  int selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Expanded(child: _buildTab(0, 'Credit Card')),
+          Expanded(child: _buildTab(1, 'Digital Wallet')),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTab(int index, String label) {
+    bool isSelected = selectedIndex == index;
+    return GestureDetector(
+      onTap: () => setState(() => selectedIndex = index),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.white : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: isSelected 
+              ? [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4)] 
+              : null,
+        ),
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            color: isSelected ? Colors.black : Colors.grey,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CreditCardForm extends StatelessWidget {
+  const _CreditCardForm();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF1F5F9).withOpacity(0.5),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: [
+          _buildTextField('CARD NUMBER', '0000 0000 0000 0000', Icons.credit_card),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(child: _buildTextField('EXPIRY DATE', 'MM / YY', null)),
+              const SizedBox(width: 16),
+              Expanded(child: _buildTextField('CVV', '•••', Icons.help_outline)),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Switch(
+                value: true, 
+                onChanged: (v) {}, 
+                activeThumbColor: const Color(0xFF004D7A),
+              ),
+              const Text('Save card for future purchases', 
+                style: TextStyle(color: Colors.black54, fontSize: 13)),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Apple/Google Pay Shortcut
+          OutlinedButton(
+            onPressed: () {},
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 50),
+              side: const BorderSide(color: Color(0xFFE2E8F0)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.payment, size: 18),
+                const SizedBox(width: 8),
+                RichText(text: const TextSpan(
+                  children: [
+                    TextSpan(text: 'Google', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'Pay', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                  ]
+                )),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextField(String label, String hint, IconData? icon) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 0.5)),
+        const SizedBox(height: 6),
+        TextFormField(
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: const TextStyle(color: Color(0xFFCBD5E0)),
+            suffixIcon: icon != null ? Icon(icon, color: const Color(0xFFCBD5E0), size: 20) : null,
+            filled: true,
+            fillColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _DeliveryMethodSelector extends StatefulWidget {
+  const _DeliveryMethodSelector();
+
+  @override
+  State<_DeliveryMethodSelector> createState() => _DeliveryMethodSelectorState();
+}
+
+class _DeliveryMethodSelectorState extends State<_DeliveryMethodSelector> {
+  int selectedMethod = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _buildMethodItem(0, 'Standard Shipping', '4-7 business days', 'Free'),
+        const SizedBox(height: 12),
+        _buildMethodItem(1, 'Express Delivery', 'Next business day', '\$45.00'),
+      ],
+    );
+  }
+
+  Widget _buildMethodItem(int index, String title, String time, String price) {
+    bool isSelected = selectedMethod == index;
+    return GestureDetector(
+      onTap: () => setState(() => selectedMethod = index),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: isSelected ? Border.all(color: const Color(0xFF004D7A), width: 2) : null,
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
+        ),
+        child: Row(
+          children: [
+            Icon(isSelected ? Icons.radio_button_checked : Icons.radio_button_off, 
+              color: isSelected ? const Color(0xFF004D7A) : Colors.grey),
+            const SizedBox(width: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(time, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+              ],
+            ),
+            const Spacer(),
+            Text(price, style: TextStyle(
+              fontWeight: FontWeight.bold, 
+              color: price == 'Free' ? Colors.green : Colors.black,
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CheckoutFooter extends StatelessWidget {
+  const _CheckoutFooter();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Text('AQUA ARTISAN', 
+          style: TextStyle(color: Color(0xFF004D7A), fontWeight: FontWeight.bold, fontSize: 14)),
+        const SizedBox(height: 16),
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _FooterLink('PRIVACY\nPOLICY'),
+            _FooterLink('TERMS OF\nSERVICE'),
+            _FooterLink('SHIPPING\nGUIDE'),
+          ],
+        ),
+        const SizedBox(height: 24),
+        Text('© 2024 Aqua Artisan. All architectural rights reserved.', 
+          style: TextStyle(color: Colors.grey.shade400, fontSize: 10)),
+      ],
+    );
+  }
+}
+
+class _FooterLink extends StatelessWidget {
+  final String text;
+  const _FooterLink(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: const TextStyle(color: Colors.grey, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 0.5),
+    );
+  }
+}
+
+
+class _ShippingAddressCard extends StatelessWidget {
+  const _ShippingAddressCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF1F5F9).withOpacity(0.5),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: const Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            backgroundColor: Color(0xFFE2E8F0),
+            child: Icon(Icons.location_on, color: Color(0xFF004D7A)),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Julianne Sterling', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                SizedBox(height: 8),
+                Text('4822 Highland View Terrace, Suite 402\nArchitectural District, Seattle, WA 98101',
+                  style: TextStyle(color: Colors.black54, height: 1.4)),
+                SizedBox(height: 8),
+                Text('+1 (555) 902-4822', style: TextStyle(color: Colors.black54)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OrderSummaryCard extends StatelessWidget {
+  const _OrderSummaryCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 20)],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Order Summary', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 20),
+          // Product Item 1
+          _buildProductRow('Aura Curve Faucet', 'Matte Black / Professional', '849.00', 'assets/images/faucet.png'),
+          const Divider(height: 32),
+          // Product Item 2
+          _buildProductRow('Zenith Basin', 'Stone Grey / Medium', '1,250.00', 'assets/images/basin.png'),
+          const SizedBox(height: 32),
+          
+          // Price Details
+          _buildPriceRow('Subtotal', '\$2,099.00'),
+          _buildPriceRow('Shipping', 'FREE', isGreen: true),
+          _buildPriceRow('Estimated Tax', '\$167.92'),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: Divider(thickness: 1),
+          ),
+          _buildPriceRow('Total', '\$2,266.92', isTotal: true),
+          const SizedBox(height: 24),
+          
+          // Place Order Button (Gradient)
+          Container(
+            width: double.infinity,
+            height: 60,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              gradient: const LinearGradient(colors: [Color(0xFFC04000), Color(0xFFFF7F50)]),
+            ),
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
+              child: const Text('Place Order', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProductRow(String name, String desc, String price, String img) {
+    return Row(
+      children: [
+        Container(
+          width: 60, height: 60,
+          decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(12)),
+          child: const Icon(Icons.water_drop_outlined, color: Colors.grey), // Placeholder
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(desc, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+              const SizedBox(height: 4),
+              Text('\$$price', style: const TextStyle(color: Color(0xFF004D7A), fontWeight: FontWeight.bold)),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPriceRow(String label, String value, {bool isGreen = false, bool isTotal = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: TextStyle(fontSize: isTotal ? 22 : 14, fontWeight: isTotal ? FontWeight.bold : FontWeight.normal, color: Colors.grey.shade600)),
+          Text(value, style: TextStyle(fontSize: isTotal ? 22 : 14, fontWeight: FontWeight.bold, color: isGreen ? Colors.green : (isTotal ? Colors.black : Colors.black87))),
+        ],
+      ),
+    );
+  }
+}
+
+class _SupportAssistanceBox extends StatelessWidget {
+  const _SupportAssistanceBox();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: const Color(0xFF004D7A).withOpacity(0.05),
+        borderRadius: BorderRadius.circular(16),
+        border: const Border(left: BorderSide(color: Color(0xFF004D7A), width: 4)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Need assistance?', style: TextStyle(color: Color(0xFF004D7A), fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          const Text('Our concierge plumbing experts are available 24/7 for technical specs or installation advice.',
+            style: TextStyle(fontSize: 12, color: Colors.black54)),
+          const SizedBox(height: 12),
+          TextButton(
+            onPressed: () {},
+            style: TextButton.styleFrom(padding: EdgeInsets.zero),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('CHAT WITH AN ARTISAN', style: TextStyle(color: Color(0xFF004D7A), fontWeight: FontWeight.bold, fontSize: 12)),
+                Icon(Icons.chevron_right, size: 16, color: Color(0xFF004D7A)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 
 class _CheckoutView extends StatelessWidget {
   const _CheckoutView();
@@ -195,6 +711,9 @@ class _CheckoutContent extends StatelessWidget {
                 ),
 
                 spacing.verticalXXL,
+                const _SupportAssistanceBox(), 
+                 spacing.verticalXL,
+                const _CheckoutFooter()
               ],
             ),
           ),
@@ -202,6 +721,8 @@ class _CheckoutContent extends StatelessWidget {
 
         // ── Place Order Button ───────────────────────────────
         _PlaceOrderButton(canPlace: state.canPlaceOrder),
+
+      
       ],
     );
   }

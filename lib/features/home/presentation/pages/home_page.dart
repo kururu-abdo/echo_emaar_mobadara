@@ -6,9 +6,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:echoemaar_commerce/config/themes/theme_context.dart';
 import 'package:echoemaar_commerce/features/home/presentation/widgets/home_carousel.dart';
 import 'package:echoemaar_commerce/features/home/presentation/widgets/theme_background.dart';
+import 'package:echoemaar_commerce/features/notifications/presentation/screens/notification_screen.dart';
 import 'package:echoemaar_commerce/features/products/presentation/bloc/favorits/favorite_state.dart';
 import 'package:echoemaar_commerce/features/products/presentation/bloc/favorits/favorites_cubit.dart';
 import 'package:echoemaar_commerce/features/products/presentation/pages/categories_page.dart';
+import 'package:echoemaar_commerce/features/products/presentation/pages/product_list_page.dart';
 import 'package:echoemaar_commerce/features/products/presentation/widgets/product_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -111,11 +113,16 @@ const SliverToBoxAdapter(
                       _ProductSection(
                         title: '✨ Featured',
                         products: state.featuredProducts,
-                        onSeeAll: () => context.pushNamed(
-                          RouteNames.categoryProducts,
-                          pathParameters: {'id': '0'},
-                          extra: 'Featured Products',
-                        ),
+                        onSeeAll: () {
+                        //   context.pushNamed(
+                        //   RouteNames.categoryProducts,
+                        //   pathParameters: {'id': '0'},
+                        //   extra: 'Featured Products',
+                        // );
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_)=> const ProductListPage())
+                        );
+                        },
                       ),
 
                     // ── Most Sold ──────────────────────────────────
@@ -343,33 +350,40 @@ class _HomeAppBar extends StatelessWidget {
             ),
 
             // Notification bell
-            Stack(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: colors.surfaceVariant,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.notifications_outlined,
-                    color: colors.textPrimary,
-                    size: 22,
-                  ),
-                ),
-                Positioned(
-                  right: 8,
-                  top: 8,
-                  child: Container(
-                    width: 8,
-                    height: 8,
+            GestureDetector(
+              onTap: (){
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_)=> const NotificationScreen())
+                );
+              },
+              child: Stack(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: colors.error,
+                      color: colors.surfaceVariant,
                       shape: BoxShape.circle,
                     ),
+                    child: Icon(
+                      Icons.notifications_outlined,
+                      color: colors.textPrimary,
+                      size: 22,
+                    ),
                   ),
-                ),
-              ],
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: colors.error,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

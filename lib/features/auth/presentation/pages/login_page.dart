@@ -1,35 +1,10 @@
 import 'dart:developer';
-
-import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:echoemaar_commerce/config/themes/theme_context.dart';
-import 'package:echoemaar_commerce/core/utilities/size_utils.dart';
-import 'package:echoemaar_commerce/core/utilities/typography_utils.dart';
-import 'package:echoemaar_commerce/core/utilities/validators.dart';
-import 'package:echoemaar_commerce/core/widgets/custom_button.dart';
+import '../providers/auth_provider.dart';
 import 'package:echoemaar_commerce/features/auth/presentation/pages/register_page.dart';
 import 'package:echoemaar_commerce/features/home/presentation/pages/dashboard.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:provider/provider.dart';
-import '../bloc/auth_bloc.dart';
-import '../providers/auth_provider.dart';
-import '../widgets/international_phone_input.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:echoemaar_commerce/config/themes/theme_context.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import '../bloc/auth_bloc.dart';
-// import '../widgets/app_button.dart'; // The scaling button we built
-import 'package:easy_localization/easy_localization.dart';
-import 'package:echoemaar_commerce/config/themes/theme_context.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import '../bloc/auth_bloc.dart';
-// import '../widgets/app_button.dart'; // The scaling button with primary gradient
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -40,106 +15,133 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(); // Updated to match design
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors; //
-var authProvider = Provider.of<AuthProvider>(context);
+    final colors = context.colors;
+    var authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
-      backgroundColor: colors.background, //
-      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
+      backgroundColor: const Color(0xFFF8FAFC), // خلفية فاتحة مائلة للزرقة حسب الصورة
       body: SingleChildScrollView(
-        padding: context.spacing.pagePadding(context), //
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // 1. Title
-              Text(
-                'Login',
-                style: context.textTheme.displaySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: colors.textPrimary, //
+              const SizedBox(height: 60),
+              // 1. Logo & Brand Name
+              Center(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
+                      ),
+                      child: const Icon(Icons.water_drop, color: Color(0xFF004D7A), size: 40),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'AQUA ARTISAN',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF004D7A),
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Welcome Back!',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black87),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Enter your credentials to access your architectural space.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                  ],
                 ),
-                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 48),
+              const SizedBox(height: 40),
 
               // 2. Email Field
-              _buildLabel('Email'),
-              _buildOutlinedField(
+              _buildLabel('EMAIL OR PHONE'),
+              _buildCustomField(
                 controller: _emailController,
-                hint: 'example@gmail.com',
-                keyboardType: TextInputType.emailAddress,
+                hint: 'Enter your email or phone',
+                suffixIcon: Icons.email_outlined,
               ),
 
               const SizedBox(height: 20),
 
               // 3. Password Field
-              _buildLabel('Password'),
-              _buildOutlinedField(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildLabel('PASSWORD'),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('Forgot Password?', 
+                      style: TextStyle(color: Color(0xFF004D7A), fontWeight: FontWeight.bold, fontSize: 12)),
+                  ),
+                ],
+              ),
+              _buildCustomField(
                 controller: _passwordController,
-                hint: '••••••••••••',
+                hint: '••••••••',
                 isPassword: true,
+                obscureText: !_isPasswordVisible,
+                suffixIcon: _isPasswordVisible ? Icons.visibility : Icons.visibility_off_outlined,
+                onSuffixTap: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
               ),
 
               const SizedBox(height: 32),
 
-              // 4. Scaling Login Button
-              AppButton(
-                label: 'Login',
+              // 4. Sign In Button (Gradient)
+              _buildGradientButton(
+                label: 'Sign In',
                 isLoading: authProvider.isLoading,
                 onTap: () {
                   if (_formKey.currentState!.validate()) {
-                   authProvider.login(context, _emailController.text.trim(), _passwordController.text.trim());
+                    authProvider.login(context, _emailController.text.trim(), _passwordController.text.trim());
                   }
                 },
               ),
 
-              const SizedBox(height: 24),
+              // const SizedBox(height: 32),
+              // _buildSocialDivider(),
+              // const SizedBox(height: 24),
 
-              // 5. Forget Password
-              Center(
-                child: TextButton(
-                  onPressed: () {
+              // // 5. Social Buttons (Google & Apple)
+              // Row(
+              //   children: [
+              //     Expanded(child: _buildSocialSmallButton('Google', 'assets/icons/google.png')), // تأكد من إضافة الأيقونات
+              //     const SizedBox(width: 16),
+              //     Expanded(child: _buildSocialSmallButton('Apple', Icons.apple)),
+              //   ],
+              // ),
 
+              const SizedBox(height: 32),
 
-
-
-                  }, // Navigate to Forget Password
-                  child: Text(
-                    'Forget Password?',
-                    style: TextStyle(
-                      color: colors.primary, //
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-              _buildSocialDivider(),
-              const SizedBox(height: 24),
-
-              // 6. Social Buttons
-              // _buildSocialButton(Icons.g_mobiledata, 'Continue with Google', Colors.white, Colors.black),
-              // const SizedBox(height: 16),
-              // _buildSocialButton(Icons.apple, 'Continue with Apple', Colors.black, Colors.white),
-              // const SizedBox(height: 16),
-              _buildSocialButton(Icons.person_outline, 'Continue as Guest', Colors.white, Colors.black ,  onTap:(){
-
-
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> const Dashboard()), (_)=> false);
-
-              }),
-
-              const SizedBox(height: 48),
-
-              // 7. Footer Redirect
+              // 6. Footer
               _buildRegisterRedirect(),
+              
+              const SizedBox(height: 40),
+              const Text(
+                '© 2024 AQUA ARTISAN SYSTEMS. PURE FLOW EXCELLENCE.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 10, color: Colors.grey, letterSpacing: 1),
+              ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -147,90 +149,106 @@ var authProvider = Provider.of<AuthProvider>(context);
     );
   }
 
-  // --- Helper Widgets ---
+  // --- Widgets المخصصة بناءً على التصميم الجديد ---
 
   Widget _buildLabel(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0, left: 4),
-      child: Text(
-        text, 
-        style: context.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+    return Text(
+      text,
+      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),
+    );
+  }
+
+  Widget _buildCustomField({
+    required TextEditingController controller,
+    required String hint,
+    bool isPassword = false,
+    bool obscureText = false,
+    required IconData suffixIcon,
+    VoidCallback? onSuffixTap,
+  }) {
+    return TextFormField(
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+        filled: true,
+        fillColor: const Color(0xFFF1F5F9),
+        suffixIcon: GestureDetector(
+          onTap: onSuffixTap,
+          child: Icon(suffixIcon, color: Colors.grey, size: 20),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
       ),
     );
   }
 
-  Widget _buildOutlinedField({
-    required TextEditingController controller,
-    required String hint,
-    bool isPassword = false,
-    TextInputType? keyboardType,
-  }) {
-    return TextFormField(
-      controller: controller,
-      obscureText: isPassword,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        hintText: hint,
-        suffixIcon: isPassword ? const Icon(Icons.visibility_off_outlined, size: 20) : null,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12), //
-          borderSide: BorderSide(color: context.colors.border), //
+  Widget _buildGradientButton({required String label, required bool isLoading, required VoidCallback onTap}) {
+    return Container(
+      height: 56,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        gradient:  LinearGradient(
+          colors: [Theme.of(context).primaryColor, Theme.of(context).colorScheme.onSurface], // تدرج برتقالي حسب التصميم
         ),
+        boxShadow: [
+          BoxShadow(color: Colors.orange.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 5)),
+        ],
+      ),
+      child: ElevatedButton(
+        onPressed: isLoading ? null : onTap,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+        child: isLoading 
+          ? const CircularProgressIndicator(color: Colors.white)
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(label, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                const SizedBox(width: 8),
+                const Icon(Icons.arrow_forward, color: Colors.white, size: 20),
+              ],
+            ),
+      ),
+    );
+  }
+
+  Widget _buildSocialSmallButton(String label, dynamic icon) {
+    return OutlinedButton(
+      onPressed: () {},
+      style: OutlinedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        side: const BorderSide(color: Color(0xFFE2E8F0)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          icon is IconData ? Icon(icon, color: Colors.black) : Image.asset(icon as String, height: 20),
+          const SizedBox(width: 8),
+          Text(label, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w600)),
+        ],
       ),
     );
   }
 
   Widget _buildSocialDivider() {
-    return Row(
+    return const Row(
       children: [
-        Expanded(child: Divider(color: context.colors.border)),
+        Expanded(child: Divider()),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text('Or sign up with', style: TextStyle(color: context.colors.textSecondary)),
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Text('OR CONTINUE WITH', style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold)),
         ),
-        Expanded(child: Divider(color: context.colors.border)),
+        Expanded(child: Divider()),
       ],
-    );
-  }
-
-  Widget _buildSocialButton(IconData icon, String label, Color bgColor, Color textColor ,{ 
-    Function? onTap
-  }) {
-    return GestureDetector(
-      onTap: (){
-        log('route');
-        onTap!();
-      },
-      child: Container(
-        height: 56,
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: OutlinedButton(
-          onPressed: () {},
-          style: OutlinedButton.styleFrom(
-            backgroundColor: bgColor,
-            foregroundColor: textColor,
-            side: BorderSide(color: context.colors.border),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 24),
-              const SizedBox(width: 12),
-              Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-            ],
-          ),
-        ),
-      ),
     );
   }
 
@@ -238,19 +256,11 @@ var authProvider = Provider.of<AuthProvider>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("Don't have an account? ", style: context.textTheme.bodyMedium),
+        const Text("Don't have an account? ", style: TextStyle(color: Colors.black87)),
         GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> const RegisterPage()));
-          },
-          child: Text(
-            'Sign up',
-            style: context.textTheme.bodyMedium!.copyWith(
-              color: context.colors.primary,
-              fontWeight: FontWeight.bold,
-              decoration: TextDecoration.underline,
-            ),
-          ),
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_)=> const RegisterPage())),
+          child:  Text('Sign Up', 
+            style: TextStyle(color:Theme.of(context).primaryColor, fontWeight: FontWeight.bold)),
         ),
       ],
     );

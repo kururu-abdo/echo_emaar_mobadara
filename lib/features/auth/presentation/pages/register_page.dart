@@ -1,24 +1,20 @@
+// lib/features/auth/presentation/pages/register_page.dart
+
 import 'package:echoemaar_commerce/config/themes/theme_context.dart';
-import 'package:echoemaar_commerce/core/utilities/size_utils.dart';
 import 'package:echoemaar_commerce/core/utilities/typography_utils.dart';
-import 'package:echoemaar_commerce/core/utilities/validators.dart';
 import 'package:echoemaar_commerce/core/widgets/custom_button.dart';
 import 'package:echoemaar_commerce/features/auth/presentation/providers/auth_provider.dart';
-import 'package:echoemaar_commerce/features/auth/presentation/widgets/auth_textfield.dart';
+import 'package:echoemaar_commerce/features/auth/presentation/widgets/auth_header_card.dart';
+import 'package:echoemaar_commerce/features/auth/presentation/widgets/auth_input_field.dart';
+import 'package:echoemaar_commerce/features/auth/presentation/widgets/auth_label.dart';
+import 'package:echoemaar_commerce/features/auth/presentation/widgets/auth_redirect_link.dart';
+import 'package:echoemaar_commerce/features/auth/presentation/widgets/social_auth_button.dart';
+import 'package:echoemaar_commerce/features/auth/presentation/widgets/terms_check.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
 import '../bloc/auth_bloc.dart';
-import '../widgets/international_phone_input.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:echoemaar_commerce/config/themes/theme_context.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import '../bloc/auth_bloc.dart';
+import 'package:go_router/go_router.dart'; // لتفعيل الـ Redirect للـ Login
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -33,161 +29,129 @@ class _RegisterPageState extends State<RegisterPage> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-
-  final String _initialCountry = 'SA'; // Default to Saudi Arabia for ORISA/ECHO
-  PhoneNumber _number = PhoneNumber(isoCode: 'SA');
+  bool _acceptTerms = false;
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors; //
-var authProvider = Provider.of<AuthProvider>(context);
+    // تم توحيد اللون الخلفي حسب التصميم المرفق
+    const bgColor = Color(0xFFF7F8FC);
 
     return Scaffold(
-      backgroundColor: colors.background, //
-      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
+      backgroundColor: bgColor,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF0D417D)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: const Text(
+          'مبادرة صدى الإعمار',
+          style: TextStyle(color: Color(0xFF0D417D), fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: context.spacing.pagePadding(context), //
+          padding: const EdgeInsets.all(20.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  'Create Account',
-                  style: context.textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: colors.textPrimary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Fill your information below or register with your social account.',
-                  style: context.textTheme.bodyMedium, //
-                  textAlign: TextAlign.center,
+                // 1. Header Card (المكون الجديد)
+                const AuthHeaderCard(
+                  title: 'إنشاء حساب جديد',
+                  subtitle: 'انضم إلينا واكتشف أفخم الأدوات الصحية لمنزلك',
+                  // يمكن إضافة مسار الصورة هنا إذا كانت متوفرة في الـ assets
+                  // imagePath: 'assets/images/header_bg.png',
                 ),
                 const SizedBox(height: 32),
-        
-                // 1. Name Field (Outlined)
-                _buildLabel('Name'),
-                _buildOutlinedField(
+
+                // 2. Name Field
+                const AuthLabel(text: 'الاسم الكامل'),
+                AuthInputField(
                   controller: _nameController,
-                  hint: 'Krish Shah',
-                  validator: (v) => v!.isEmpty ? 'Name is required' : null,
+                  hintText: 'أدخل اسمك الكامل',
+                  suffixIcon: Icons.person_outline,
+                  validator: (v) => v!.isEmpty ? 'الاسم مطلوب' : null,
                 ),
-        
                 const SizedBox(height: 20),
-        
-                // 2. Phone Number Field (Required with Country Picker)
-                _buildLabel('Phone Number'),
-                _buildPhoneInput(context),
-        
+
+                // 3. Phone Field
+                const AuthLabel(text: 'رقم الهاتف'),
+                AuthInputField(
+                  controller: _phoneController,
+                  hintText: '+966 5X XXX XXXX',
+                  suffixIcon: Icons.phone_outlined,
+                  keyboardType: TextInputType.phone,
+                  validator: (v) => v!.isEmpty ? 'رقم الهاتف مطلوب' : null,
+                ),
                 const SizedBox(height: 20),
-        
-                // 3. Email Field (Optional)
-                _buildLabel('Email (Optional)'),
-                _buildOutlinedField(
+
+                // 4. Email Field
+                const AuthLabel(text: 'البريد الإلكتروني'),
+                AuthInputField(
                   controller: _emailController,
-                  hint: 'example@gmail.com',
+                  hintText: 'example@domain.com',
+                  suffixIcon: Icons.email_outlined,
                   keyboardType: TextInputType.emailAddress,
+                  // Email is optional in the logic, no validator
                 ),
-        
                 const SizedBox(height: 20),
-        
-                // 4. Password Fields
-                _buildLabel('Password'),
-                _buildOutlinedField(
+
+                // 5. Password Field
+                const AuthLabel(text: 'كلمة المرور'),
+                AuthInputField(
                   controller: _passwordController,
-                  hint: '••••••••••••',
+                  hintText: '••••••••',
+                  suffixIcon: _isPasswordVisible ? Icons.visibility : Icons.visibility_off_outlined,
                   isPassword: true,
+                  obscureText: !_isPasswordVisible,
+                  onSuffixTap: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+                  prefixIcon: Icons.lock_outline,
                 ),
-        
-                const SizedBox(height: 20),
-        
-                _buildLabel('Confirm Password'),
-                _buildOutlinedField(
-                  controller: _confirmPasswordController,
-                  hint: '••••••••••••',
-                  isPassword: true,
-                  validator: (v) => v != _passwordController.text ? 'Passwords do not match' : null,
-                ),
-        
-                const SizedBox(height: 32),
-        
-                // 5. Scaling Sign Up Button
-                AppButton(
-                  label: 'Sign up',
-                  onTap: _handleSignUp,
-                ),
-        
                 const SizedBox(height: 24),
-                // _buildSocialDivider(),
-                // const SizedBox(height: 24),
-        
-                // // 6. Social Buttons
-                // _buildSocialButton(Icons.g_mobiledata, 'Continue with Google', Colors.white, Colors.black),
-                // const SizedBox(height: 16),
-                // _buildSocialButton(Icons.apple, 'Continue with Apple', Colors.black, Colors.white),
-        
-                // const SizedBox(height: 32),
-                _buildLoginRedirect(),
+
+                // 6. Terms and Conditions
+                TermsCheckbox(
+                  value: _acceptTerms,
+                  onChanged: (newValue) => setState(() => _acceptTerms = newValue!),
+                ),
+                const SizedBox(height: 32),
+
+                // 7. Sign Up Button
+                AppButton(
+                  label: 'إنشاء حساب',
+                  icon: Icons.arrow_back, // السهم لليسار في العربية
+                  onTap: _acceptTerms ? _handleSignUp : null, // معطل إذا لم يتم قبول الشروط
+                ),
+                const SizedBox(height: 32),
+
+                // 8. Redirect and Social Buttons
+                AuthRedirectLink(
+                  promptText: 'لديك حساب بالفعل؟ ',
+                  linkText: 'تسجيل الدخول',
+                  onTap: () => context.pushNamed('/login'),
+                ),
+                const SizedBox(height: 24),
+                
+                // تم دمج الـ Divider والـ Buttons في ويدجيت واحدة
+                const SocialAuthButtons(),
+
+                const SizedBox(height: 48),
+                // Footer
+                const Center(
+                  child: Text(
+                    'حقوق الطبع محفوظة • 2024',
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                ),
               ],
             ),
           ),
         ),
-      ),
-    );
-
-  }
-
-  // --- Helper Widgets ---
-
-  Widget _buildLabel(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0, left: 4),
-      child: Text(text, style: context.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold)),
-    );
-  }
-
-  Widget _buildOutlinedField({
-    required TextEditingController controller,
-    required String hint,
-    bool isPassword = false,
-    TextInputType? keyboardType,
-    String? Function(String?)? validator,
-  }) {
-    return TextFormField(
-      controller: controller,
-      obscureText: isPassword,
-      keyboardType: keyboardType,
-      validator: validator,
-      decoration: InputDecoration(
-        hintText: hint,
-        suffixIcon: isPassword ? const Icon(Icons.visibility_off_outlined, size: 20) : null,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)), //
-      ),
-    );
-  }
-
-  Widget _buildPhoneInput(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: context.colors.border),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: InternationalPhoneNumberInput(
-        onInputChanged: (PhoneNumber number) => _number = number,
-        initialValue: _number,
-        textFieldController: _phoneController,
-        selectorConfig: const SelectorConfig(selectorType: PhoneInputSelectorType.BOTTOM_SHEET),
-        ignoreBlank: false,
-        autoValidateMode: AutovalidateMode.onUserInteraction,
-        formatInput: true,
-        inputDecoration: const InputDecoration(border: InputBorder.none, hintText: '50 000 0000'),
       ),
     );
   }
@@ -199,88 +163,8 @@ var authProvider = Provider.of<AuthProvider>(context);
         name: _nameController.text.trim(),
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
-        // Pass phone from _number.phoneNumber
+        // Pass phone properly formated if needed
       ));
     }
   }
-
-  // ... (Social button & Divider helper methods)
-
-  Widget _buildSocialDivider() {
-  final colors = context.colors; //
-  
-  return Row(
-    children: [
-      Expanded(child: Divider(color: colors.border, thickness: 1)), //
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Text(
-          'Or sign up with',
-          style: context.textTheme.bodySmall!.copyWith(color: colors.textSecondary), //
-        ),
-      ),
-      Expanded(child: Divider(color: colors.border, thickness: 1)),
-    ],
-  );
-}
-
-Widget _buildSocialButton(
-  IconData icon, 
-  String label, 
-  Color bgColor, 
-  Color textColor,
-) {
-  final shapes = context.shapes; //
-
-  return SizedBox(
-    height: 56,
-    child: OutlinedButton(
-      onPressed: () {
-        // Handle Social Auth via Bloc/Provider
-      },
-      style: OutlinedButton.styleFrom(
-        backgroundColor: bgColor,
-        foregroundColor: textColor,
-        side: BorderSide(color: context.colors.border), //
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(shapes.borderRadiusMedium), //
-        ),
-        elevation: 0,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 24),
-          const SizedBox(width: 12),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-Widget _buildLoginRedirect() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Text(
-        'Already have an account? ',
-        style: context.textTheme.bodyMedium, //
-      ),
-      GestureDetector(
-        onTap: () => context.goNamed('/login'), // Using GoRouter as requested
-        child: Text(
-          'Login',
-          style: context.textTheme.bodyMedium!.copyWith(
-            color: context.colors.primary, // #1d6fa4
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    ],
-  );
-}
 }

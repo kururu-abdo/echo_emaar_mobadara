@@ -3,6 +3,8 @@
 // FILE: features/home/presentation/bloc/home_bloc.dart
 // ═══════════════════════════════════════════════════════════════════
 
+import 'dart:developer';
+
 import 'package:echoemaar_commerce/features/products/domain/usecases/get_featured_products.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -89,6 +91,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       final featured = featuredResult.fold(
         (failure) {
+          log('BIG FAILURE ${failure}');
           error ??= failure.message;
           return <Product>[];
         },

@@ -18,6 +18,10 @@ class ProductModel extends Product {
     required super.uomName,
     required super.qtyAvailable,
     required super.virturalAvaiable,
+        required super.color,
+            required super.price,
+
+
     super.active,
   
   });
@@ -54,6 +58,8 @@ class ProductModel extends Product {
       standardPrice: odooData['standard_price'] != null 
           ? (odooData['standard_price'] as num).toDouble() 
           : null,
+          color: odooData['color'],
+          price: odooData['list_price'],
       imageUrl: odooData['image']??'',
     
       category: odooData['category_name'] is String 
@@ -80,6 +86,8 @@ class ProductModel extends Product {
       'image': imageUrl,
       'standard_price': standardPrice,
       'active': active,
+      'color': color , 
+      'price': listPrice
     };
   }
 }

@@ -19,6 +19,8 @@ ProductModel _$ProductModelFromJson(Map<String, dynamic> json) => ProductModel(
       qtyAvailable: (json['qty_available'] as num).toInt(),
       virturalAvaiable: (json['virtural_avaiable'] as num).toInt(),
       active: json['active'] as bool?,
+      color: json['color'], 
+      price: json['list_price']
     );
 
 Map<String, dynamic> _$ProductModelToJson(ProductModel instance) =>
@@ -35,4 +37,6 @@ Map<String, dynamic> _$ProductModelToJson(ProductModel instance) =>
       'category_name': instance.category,
       'image': instance.imageUrl,
       'active': instance.active,
+      'price': instance.listPrice, 
+      'color': instance.color
     };

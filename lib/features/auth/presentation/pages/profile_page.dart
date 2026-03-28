@@ -18,6 +18,9 @@ import '../bloc/auth_bloc.dart';
 import '../../domain/entities/user.dart';
 import '../../../../config/routes/route_names.dart';
 
+
+
+/*
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
@@ -570,6 +573,326 @@ class _ActionCard extends StatelessWidget {
             ],
           );
         }).toList(),
+      ),
+    );
+  }
+}
+
+
+*/
+
+
+import 'package:echoemaar_commerce/config/themes/theme_context.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import '../bloc/auth_bloc.dart';
+import '../../domain/entities/user.dart';
+import '../../../../config/routes/route_names.dart';
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is Unauthenticated) {
+          while (context.canPop()) context.pop();
+          context.goNamed(RouteNames.login);
+        }
+      },
+      builder: (context, state) {
+        if (state is Authenticated) {
+          return _ProfileView(user: state.user);
+        }
+        return const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      },
+    );
+  }
+}
+
+class _ProfileView extends StatelessWidget {
+  final User user;
+
+  const _ProfileView({required this.user});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC), // خلفية التصميم الجديد
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Icon(Icons.menu, color: colors.primary),
+        title: Text('AQUA ARTISAN', style: TextStyle(color: colors.primary, fontWeight: FontWeight.bold, fontSize: 18)),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.shopping_cart_outlined, color: colors.primary),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            // 1. Header: Avatar & Info
+            _buildProfileInfo(user),
+            
+            const SizedBox(height: 40),
+            
+            // 2. Account Hub
+            _buildSectionLabel('ACCOUNT HUB'),
+            const SizedBox(height: 16),
+            _buildAccountHub(context),
+            
+            const SizedBox(height: 24),
+            
+            // 3. Notification & Security List
+            _buildGeneralSettings(context),
+            
+            const SizedBox(height: 40),
+            
+            // 4. Resources
+            _buildSectionLabel('RESOURCES'),
+            const SizedBox(height: 16),
+            _buildResourcesCard(context),
+            
+            const SizedBox(height: 40),
+            
+            // 5. Logout Button
+            _buildLogoutButton(context),
+            
+            const SizedBox(height: 20),
+            const Text('APP VERSION 4.2.0 • 2024', style: TextStyle(color: Colors.grey, fontSize: 10, letterSpacing: 1.2)),
+            const SizedBox(height: 40),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // --- Profile Header ---
+  Widget _buildProfileInfo(User user) {
+    return Column(
+      children: [
+        Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.orange.shade300, width: 2)),
+              child: CircleAvatar(
+                radius: 50,
+                backgroundColor: const Color(0xFFE2E8F0),
+                child: Text(user.username[0].toUpperCase(), style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: const BoxDecoration(color: Color(0xFF004D7A), shape: BoxShape.circle),
+              child: const Icon(Icons.edit, color: Colors.white, size: 16),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Text(user.username, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        Text(user.email, style: const TextStyle(color: Colors.grey)),
+        const SizedBox(height: 12),
+        _buildPlatinumBadge(),
+      ],
+    );
+  }
+
+  Widget _buildPlatinumBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      decoration: BoxDecoration(color: Colors.orange.shade100.withOpacity(0.5), borderRadius: BorderRadius.circular(20)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.stars, color: Colors.orange.shade800, size: 14),
+          const SizedBox(width: 8),
+          Text('PLATINUM MEMBER', style: TextStyle(color: Colors.orange.shade900, fontWeight: FontWeight.bold, fontSize: 10)),
+        ],
+      ),
+    );
+  }
+
+  // --- Account Hub Grid ---
+  Widget _buildAccountHub(BuildContext context) {
+    return Column(
+      children: [
+        _HubItem(
+          title: 'My Orders',
+          subtitle: 'Track & manage deliveries',
+          icon: Icons.inventory_2_outlined,
+          badge: '2 ACTIVE',
+          isFullWidth: true,
+          onTap: () {
+          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_)=> const OrderHistoryPage())
+                          );
+          },
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(child: _HubItem(title: 'Saved\nAddresses', subtitle: '3 Locations', icon: Icons.location_on_outlined, onTap: () {})),
+            const SizedBox(width: 16),
+            Expanded(child: _HubItem(title: 'invoices', subtitle: 'Your invoices', icon: Icons.receipt, onTap: () {
+Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_)=> const InvoicesPage())
+                          );
+
+            })),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // --- Settings List ---
+  Widget _buildGeneralSettings(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(color: const Color(0xFFF1F5F9).withOpacity(0.5), borderRadius: BorderRadius.circular(20)),
+      child: Column(
+        children: [
+          _buildSettingsTile(context, 'Notification Settings', Icons.notifications_none_outlined),
+          _buildDivider(),
+          _buildSettingsTile(context, 'Privacy & Security', Icons.shield_outlined),
+          _buildDivider(),
+          _buildSettingsTile(context, 'Language Selection', Icons.language, trailingText: 'ENGLISH'),
+        ],
+      ),
+    );
+  }
+
+  // --- Resources ---
+  Widget _buildResourcesCard(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+      child: Column(
+        children: [
+          _buildSettingsTile(context, 'Help Center', Icons.help_outline, trailingText: 'Get Support', isActionText: true),
+          _buildDivider(),
+          _buildSettingsTile(context, 'About Aqua Artisan', Icons.info_outline, isExternal: true),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLogoutButton(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: () => _showLogoutDialog(context),
+        icon: const Icon(Icons.logout, color: Colors.red, size: 20),
+        label: const Text('LOG OUT', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
+        style: OutlinedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          side: BorderSide(color: Colors.red.shade100),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        ),
+      ),
+    );
+  }
+
+  // --- Helpers ---
+  Widget _buildSectionLabel(String label) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+    );
+  }
+
+  Widget _buildSettingsTile(BuildContext context, String title, IconData icon, {String? trailingText, bool isActionText = false, bool isExternal = false}) {
+    return ListTile(
+      leading: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(color: Colors.blue.shade50, borderRadius: BorderRadius.circular(10)),
+        child: Icon(icon, color: const Color(0xFF004D7A), size: 20),
+      ),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (trailingText != null) 
+            Text(trailingText, style: TextStyle(color: isActionText ? const Color(0xFF004D7A) : Colors.grey, fontSize: 12, fontWeight: FontWeight.bold)),
+          const SizedBox(width: 4),
+          Icon(isExternal ? Icons.open_in_new : Icons.chevron_right, size: 16, color: Colors.grey),
+        ],
+      ),
+      onTap: () {},
+    );
+  }
+
+  Widget _buildDivider() => Divider(height: 1, indent: 20, endIndent: 20, color: Colors.grey.shade100);
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(onPressed: () => ctx.pop(), child: const Text('Cancel')),
+          TextButton(onPressed: () { ctx.pop(); context.read<AuthBloc>().add(LogoutEvent()); }, child: const Text('Logout', style: TextStyle(color: Colors.red))),
+        ],
+      ),
+    );
+  }
+}
+
+// --- Hub Item Widget ---
+class _HubItem extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final String? badge;
+  final bool isFullWidth;
+  final VoidCallback onTap;
+
+  const _HubItem({required this.title, required this.subtitle, required this.icon, this.badge, this.isFullWidth = false, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)]),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(color: const Color(0xFFE2E8F0).withOpacity(0.5), borderRadius: BorderRadius.circular(12)),
+                  child: Icon(icon, color: const Color(0xFF004D7A)),
+                ),
+                if (badge != null)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(10)),
+                    child: Text(badge!, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+          ],
+        ),
       ),
     );
   }

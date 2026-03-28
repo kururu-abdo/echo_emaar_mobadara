@@ -5,11 +5,13 @@ import 'package:echoemaar_commerce/features/cart/presentation/bloc/cart_bloc.dar
 import 'package:echoemaar_commerce/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:echoemaar_commerce/features/checkout/presentation/providers/checkout_provider.dart';
 import 'package:echoemaar_commerce/features/invoice/presentation/providers/invoice_provider.dart';
+import 'package:echoemaar_commerce/features/notifications/presentation/providers/notification_provider.dart';
 import 'package:echoemaar_commerce/features/orders/presentation/providers/order_provider.dart';
 import 'package:echoemaar_commerce/features/products/presentation/bloc/categories/category_bloc.dart';
 import 'package:echoemaar_commerce/features/products/presentation/bloc/favorits/favorites_cubit.dart';
 import 'package:echoemaar_commerce/features/products/presentation/bloc/product_detail/product_detail_bloc.dart';
 import 'package:echoemaar_commerce/features/products/presentation/bloc/product_list/product_list_bloc.dart';
+import 'package:echoemaar_commerce/features/search/presentation/providers/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -72,6 +74,18 @@ BlocProvider<CheckoutBloc>(
           create: (context) => di.sl<AuthProvider>()
           
         ),
+
+           ChangeNotifierProvider<SearchProvider>(
+          create: (context) => di.sl<SearchProvider>()
+          
+        ),
+ChangeNotifierProvider<NotificationProvider>(
+          create: (context) => di.sl<NotificationProvider>()
+          
+        ),
+
+
+
  ChangeNotifierProvider<CheckoutProvider>(
           create: (context) => di.sl<CheckoutProvider>()
           

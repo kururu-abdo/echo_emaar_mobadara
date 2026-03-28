@@ -48,6 +48,7 @@ import 'package:echoemaar_commerce/features/invoice/data/repositories/invoice_re
 import 'package:echoemaar_commerce/features/invoice/domain/repositories/invoice_repository.dart';
 import 'package:echoemaar_commerce/features/invoice/domain/usecases/get_invoices.dart';
 import 'package:echoemaar_commerce/features/invoice/presentation/providers/invoice_provider.dart';
+import 'package:echoemaar_commerce/features/notifications/presentation/providers/notification_provider.dart';
 import 'package:echoemaar_commerce/features/orders/data/datasources/order_local_datasource.dart';
 import 'package:echoemaar_commerce/features/orders/data/datasources/order_remote_datasource.dart' hide AuthRemoteDataSource, AuthRemoteDataSourceImpl;
 import 'package:echoemaar_commerce/features/orders/data/repositories/order_repository_impl.dart';
@@ -70,6 +71,7 @@ import 'package:echoemaar_commerce/features/products/presentation/bloc/categorie
 import 'package:echoemaar_commerce/features/products/presentation/bloc/favorits/favorites_cubit.dart';
 import 'package:echoemaar_commerce/features/products/presentation/bloc/product_detail/product_detail_bloc.dart';
 import 'package:echoemaar_commerce/features/products/presentation/bloc/product_list/product_list_bloc.dart';
+import 'package:echoemaar_commerce/features/search/presentation/providers/search_provider.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http  hide HttpClient;
@@ -106,6 +108,8 @@ Future<void> init() async {
   await Hive.initFlutter();
  
   // Register all feature dependencies
+    _initSearch();
+_initNotifications();
   _initInvoices();
   _initAuth();
   _initProducts();
@@ -153,6 +157,24 @@ Future<void> init() async {
 //     ),
 //   );
 // }
+void     _initSearch(){
+
+  // Provider
+  sl.registerFactory(
+    () => SearchProvider(
+  
+    ),
+  );
+}
+void     _initNotifications(){
+
+  // Provider
+  sl.registerFactory(
+    () => NotificationProvider(
+  
+    ),
+  );
+}
 
 void _initProducts() {
 

@@ -4,6 +4,8 @@ class RouteNames {
   static const String login = '/login';
   static const String register = '/register';
   static const String otpVerification = '/otp-verification';
+    static const String onBoarding = '/onboarding';
+
   
   // Main routes
   static const String home = '/home';

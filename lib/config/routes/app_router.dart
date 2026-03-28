@@ -13,6 +13,8 @@ import 'package:echoemaar_commerce/features/products/presentation/bloc/product_l
 import 'package:echoemaar_commerce/features/products/presentation/pages/product_detail_page.dart';
 import 'package:echoemaar_commerce/features/products/presentation/pages/product_list_page.dart';
 import 'package:echoemaar_commerce/features/settings/presentation/pages/setting_page.dart';
+import 'package:echoemaar_commerce/shared/screens/on_boarding_screen.dart';
+import 'package:echoemaar_commerce/shared/screens/splash_page.dart';
 // import 'package:echoemaar_commerce/features/cart/presentation/bloc/cart_bloc.dart';
 // import 'package:echoemaar_commerce/features/cart/presentation/bloc/cart_state.dart';
 // import 'package:echoemaar_commerce/features/checkout/presentation/pages/add_address_page.dart';
@@ -61,6 +63,13 @@ class AppRouter {
         name: RouteNames.splash, // This allows context.goNamed(RouteNames.splash)
         builder: (context, state) => const SplashPage(),
       ),
+
+ GoRoute(
+        path: RouteNames.onBoarding,
+        name: RouteNames.onBoarding, // This allows context.goNamed(RouteNames.splash)
+        builder: (context, state) => const OnboardingScreen(),
+      ),
+
   GoRoute(
         path: RouteNames.settings,
         name: RouteNames.settings, // This allows context.goNamed(RouteNames.splash)
@@ -263,155 +272,7 @@ class MainScaffold extends StatelessWidget {
   }
 }
 
-// Splash Page
-class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
 
-  @override
-  State<SplashPage> createState() => _SplashPageState();
-}
-
-class _SplashPageState extends State<SplashPage>  with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-  late Animation<double> _scaleAnimation;
-  
-  @override
-  void initState() {
-    super.initState();
-    
-    // Setup animations
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    );
-    
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: const Interval(0.0, 0.6, curve: Curves.easeIn),
-      ),
-    );
-    
-    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
-      ),
-    );
-    
-    _animationController.forward();
-    
-    // Check auth status and navigate after 3 seconds
-    _checkAuthAndNavigate();
-  }
-  
-  Future<void> _checkAuthAndNavigate() async {
-    // Wait for animation + minimum display time
-    await Future.delayed(const Duration(seconds: 3));
-    
-    if (!mounted) return;
-    
-    // Check auth status
-    //  context.read<AuthBloc>()
-    final authState =await context.read<AuthProvider>().isLoggedIn(context);
-    
-    if (authState) {
-      // User is logged in, go to dashboard
-      // context.goNamed(RouteNames.dashboard);
-      Navigator.pushNamed(context,RouteNames.login);
-  //     Navigator.of(context).push(
-  // MaterialPageRoute(
-  //   builder: (_) =>  ProductListPage(),
-  //   ),
-  
-  // );
-
-    } else {
-      // User is not logged in, go to login
-      // context.goNamed(RouteNames.login);
-       Navigator.pushNamed(context,RouteNames.login);
-    }
-  }
-  
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-  
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.colors.primary,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Animated Logo
-            AnimatedBuilder(
-              animation: _animationController,
-              builder: (context, child) {
-                return FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: ScaleTransition(
-                    scale: _scaleAnimation,
-                    child: Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: Icon(
-                        Icons.shopping_bag,
-                        size: 60,
-                        color: context.colors.primary,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-            
-            const SizedBox(height: 24),
-            
-            // App Name
-            AnimatedBuilder(
-              animation: _fadeAnimation,
-              builder: (context, child) {
-                return FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: Text(
-                    context.themeContext.brandConfig.brandName,
-                    style: TextStyles.h2(context).copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                );
-              },
-            ),
-            
-            const SizedBox(height: 48),
-            
-            // Loading Indicator
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 
 
@@ -426,6 +287,9 @@ class AppRouteGenerator {
         return MaterialPageRoute(builder: (_) => const SplashPage());
        case RouteNames.login:
         return MaterialPageRoute(builder: (_) => const LoginPage());
+          case RouteNames.onBoarding:
+        return MaterialPageRoute(builder: (_) => const OnboardingScreen());
+        
        case RouteNames.dashboard:
         return MaterialPageRoute(builder: (_) => const Dashboard());
        case RouteNames.home:

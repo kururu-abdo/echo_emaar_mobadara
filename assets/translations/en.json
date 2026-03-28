@@ -510,6 +510,22 @@
     "about": "About",
     "version": "App Version",
     "privacy": "Privacy Policy",
-    "terms": "Terms of Service"
+    "terms": "Terms of Service", 
+
+    "onboarding_skip": "Skip",
+  "onboarding_initiative": "Sada Al-Emaar Initiative",
+  "onboarding_next": "Next",
+  "onboarding_prev": "Previous",
+  "onboarding_start": "Start Now",
+  "onboarding_last_step": "Last Step",
+  
+  "onboarding_title_1": "Discover Luxury Sanitary Ware",
+  "onboarding_sub_1": "Explore the finest collection of architectural fixtures for your dream home. We combine high technical performance with unique artistic design.",
+  
+  "onboarding_title_2": "Professional Design Support",
+  "onboarding_sub_2": "Connect with our professional designers to bring your vision to life with precision and professionalism.",
+  
+  "onboarding_title_3": "Fast & Secure Delivery",
+  "onboarding_sub_3": "Enjoy seamless delivery service for all architectural components, directly to your project site with accuracy."
   }
 }

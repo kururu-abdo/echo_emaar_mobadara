@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:echoemaar_commerce/core/error/%20exceptions.dart';
 import '../../../../core/error/failures.dart';
@@ -133,8 +135,10 @@ class ProductRepositoryImpl implements ProductRepository {
     
     try {
       final products = await remoteDataSource.getFeaturedProducts();
+      log('BIG FAILURE $products');
       return Right(products);
-    } on ServerException catch (e) {
+    } on ServerException catch (e){
+          log('BIG FAILURE ${e.message}');
       return Left(ServerFailure(e.message));
     } catch (e) {
       return Left(ServerFailure(e.toString()));

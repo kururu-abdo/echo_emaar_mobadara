@@ -11,6 +11,7 @@ import 'package:echoemaar_commerce/core/utilities/orientation_utils.dart';
 import 'package:echoemaar_commerce/core/utilities/responsive_utils.dart';
 import 'package:echoemaar_commerce/features/products/presentation/bloc/favorits/favorite_state.dart';
 import 'package:echoemaar_commerce/features/products/presentation/bloc/favorits/favorites_cubit.dart';
+import 'package:echoemaar_commerce/features/products/presentation/widgets/all_products_shimmer.dart';
 import 'package:echoemaar_commerce/features/products/presentation/widgets/empty_product_state.dart';
 import 'package:echoemaar_commerce/features/products/presentation/widgets/product_grid.dart';
 import 'package:flutter/material.dart';
@@ -287,7 +288,7 @@ class _ProductListPageState extends State<ProductListPage> {
                 if (state is ProductListLoading) {
                   return
                   
-                  const CircularProgressIndicator();
+                  const AllProductsShimmer();
                   //  const ProductGridShimmer();
                 }
                 if (state is ProductListError) {

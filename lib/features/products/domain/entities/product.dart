@@ -13,6 +13,8 @@ class Product extends Equatable {
   final String  category;
   final String imageUrl;
   final bool? active;
+  final String? color;
+  final double? price;
 
   const Product({
     required this.id,
@@ -27,6 +29,7 @@ class Product extends Equatable {
     required this.category,
     required this.imageUrl,
     this.active,
+    this.color ,this.price
     
   });
   
@@ -53,6 +56,6 @@ class Product extends Equatable {
     active,
     qtyAvailable,
     virturalAvaiable,
-  
+  price  , color
   ];
 }
