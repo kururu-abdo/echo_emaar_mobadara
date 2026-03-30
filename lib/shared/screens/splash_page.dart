@@ -69,77 +69,79 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
     return Scaffold(
       backgroundColor: brandBlue,
-      body: Stack(
-        children: [
-          // المحتوى الرئيسي في المنتصف
-          Center(
-            child: FadeTransition(
-              opacity: _fadeAnimation,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // 1. Logo (صورة اللوجو الأبيض من الـ Assets)
-                  Image.asset(
-                    'assets/images/aqua_logo_white.png', 
-                    width: 120,
-                    height: 120,
-                  ),
-                  const SizedBox(height: 32),
-                  
-                  // 2. Brand Name
-                  const Text(
-                    'AQUA\nARTISAN',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2,
-                      height: 1.1,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // المحتوى الرئيسي في المنتصف
+            Center(
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // 1. Logo (صورة اللوجو الأبيض من الـ Assets)
+                    Image.asset(
+                      'assets/images/aqua_logo_white.png', 
+                      width: 120,
+                      height: 120,
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  
-                  // 3. Tagline مع الخطوط الجانبية
-                  const _SplashTagline(text: 'PROFESSIONAL SANITARY\nSOLUTIONS'),
-                  
-                  const SizedBox(height: 60),
-                  
-                  // 4. الرابط البصري المتدرج (الخط الصغير في المنتصف)
-                  Container(
-                    width: 2,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.white.withOpacity(0.5), Colors.transparent],
+                    const SizedBox(height: 32),
+                    
+                    // 2. Brand Name
+                    const Text(
+                      'AQUA\nARTISAN',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2,
+                        height: 1.1,
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  
-                  const Text(
-                    'REFINING THE FLOW OF LUXURY',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                      letterSpacing: 1.5,
+                    const SizedBox(height: 16),
+                    
+                    // 3. Tagline مع الخطوط الجانبية
+                    const _SplashTagline(text: 'PROFESSIONAL SANITARY\nSOLUTIONS'),
+                    
+                    const SizedBox(height: 60),
+                    
+                    // 4. الرابط البصري المتدرج (الخط الصغير في المنتصف)
+                    Container(
+                      width: 2,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.white.withOpacity(0.5), Colors.transparent],
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 24),
+                    
+                    const Text(
+                      'REFINING THE FLOW OF LUXURY',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          
-          // 5. الأيقونات السفلية (Reusable Widget)
-          const Positioned(
-            bottom: 40,
-            left: 0,
-            right: 0,
-            child: SplashBottomIcons(),
-          ),
-        ],
+            
+            // 5. الأيقونات السفلية (Reusable Widget)
+            const Positioned(
+              bottom: 40,
+              left: 0,
+              right: 0,
+              child: SplashBottomIcons(),
+            ),
+          ],
+        ),
       ),
     );
   }

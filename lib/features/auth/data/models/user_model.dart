@@ -23,10 +23,10 @@ class UserModel extends User {
   
   factory UserModel.fromOdoo(Map<String, dynamic> odooData) {
     return UserModel(
-      uid: odooData['uid'] as int,
-      username: (odooData['name']??odooData['username']) as String,
+      uid: odooData['uid'],
+      username: (odooData['name']??odooData['username']),
       email: odooData['email'].toString(),
-      partnerId: odooData['partner_id'] as int,
+      partnerId: odooData['partner_id'] ,
       companyName: odooData['comnpany_name']??'', 
       sessionId: odooData['session_id']??'');
     

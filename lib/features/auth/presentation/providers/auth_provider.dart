@@ -73,7 +73,60 @@ return const Dashboard();
     }
   }
 
+// lib/features/auth/presentation/providers/auth_provider.dart
 
+  // ... الكود الحالي في AuthProvider
+
+  Future<void> register({
+    required BuildContext context,
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+
+      // call the RegisterUser use case with required params
+      final result = await registerUser(RegisterUserParams(
+        name: name,
+        email: email,
+        password: password,
+      ));
+
+      result.fold(
+        (failure) {
+          log('REGISTRATION FAILED: ${failure.message}');
+          _isLoading = false;
+          notifyListeners();
+          // عرض رسالة الخطأ للمستخدم
+          ToastUtils.show(context, failure.message, type: ToastType.error);
+        },
+        (user) {
+          log('SUCCESS Registration: ${user.username}');
+          _isLoading = false;
+          notifyListeners();
+          
+          // الانتقال إلى لوحة التحكم بعد نجاح التسجيل
+          // Navigator.of(context).pushAndRemoveUntil(
+          //   MaterialPageRoute(builder: (_) => const Logi()),
+          //   (_) => false,
+          // );
+          Navigator.of(context).pushNamed(RouteNames.login);
+          ToastUtils.show(context, "Account created successfully", type: ToastType.success);
+        },
+      );
+    } catch (e) {
+      log('Unexpected error during registration: ${e.toString()}');
+      _isLoading = false;
+      notifyListeners();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+// ... باقي الكود
   Future<bool> isLoggedIn(BuildContext context)async{
     try {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();

@@ -8,6 +8,7 @@ import 'package:echoemaar_commerce/features/auth/presentation/widgets/auth_heade
 import 'package:echoemaar_commerce/features/auth/presentation/widgets/auth_input_field.dart';
 import 'package:echoemaar_commerce/features/auth/presentation/widgets/auth_label.dart';
 import 'package:echoemaar_commerce/features/auth/presentation/widgets/auth_redirect_link.dart';
+import 'package:echoemaar_commerce/features/auth/presentation/widgets/phone_input_field.dart';
 import 'package:echoemaar_commerce/features/auth/presentation/widgets/social_auth_button.dart';
 import 'package:echoemaar_commerce/features/auth/presentation/widgets/terms_check.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     // تم توحيد اللون الخلفي حسب التصميم المرفق
     const bgColor = Color(0xFFF7F8FC);
-
+var authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
@@ -77,10 +78,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   suffixIcon: Icons.person_outline,
                   validator: (v) => v!.isEmpty ? 'الاسم مطلوب' : null,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
                 // 3. Phone Field
                 const AuthLabel(text: 'رقم الهاتف'),
+                /*
                 AuthInputField(
                   controller: _phoneController,
                   hintText: '+966 5X XXX XXXX',
@@ -88,7 +90,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   keyboardType: TextInputType.phone,
                   validator: (v) => v!.isEmpty ? 'رقم الهاتف مطلوب' : null,
                 ),
-                const SizedBox(height: 20),
+*/
+                PhoneInputField(
+  controller: _phoneController,
+  onFullNumberSaved: (fullNumber) {
+    // هذا هو الرقم الذي سترسله للـ API (مثلاً: +966501234567)
+    print("Final Phone for API: $fullNumber");
+    
+    // أضف الرقم للـ Bloc أو الـ Provider هنا
+    // context.read<AuthBloc>().add(RegisterEvent(phone: fullNumber, ...));
+  },
+),
+                const SizedBox(height: 16),
 
                 // 4. Email Field
                 const AuthLabel(text: 'البريد الإلكتروني'),
@@ -99,7 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   keyboardType: TextInputType.emailAddress,
                   // Email is optional in the logic, no validator
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
                 // 5. Password Field
                 const AuthLabel(text: 'كلمة المرور'),
@@ -112,7 +125,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   onSuffixTap: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
                   prefixIcon: Icons.lock_outline,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 18),
 
                 // 6. Terms and Conditions
                 TermsCheckbox(
@@ -123,6 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // 7. Sign Up Button
                 AppButton(
+                  isLoading: authProvider.isLoading ,
                   label: 'إنشاء حساب',
                   icon: Icons.arrow_back, // السهم لليسار في العربية
                   onTap: _acceptTerms ? _handleSignUp : null, // معطل إذا لم يتم قبول الشروط
@@ -138,9 +152,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 24),
                 
                 // تم دمج الـ Divider والـ Buttons في ويدجيت واحدة
-                const SocialAuthButtons(),
+                // const SocialAuthButtons(),
 
-                const SizedBox(height: 48),
+                // const SizedBox(height: 48),
                 // Footer
                 const Center(
                   child: Text(
@@ -158,6 +172,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void _handleSignUp() {
     if (_formKey.currentState!.validate()) {
+      context.read<AuthProvider>().register( context: context,
+        name: _nameController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),);
+        /*
       context.read<AuthBloc>().add(RegisterEvent(
         context: context,
         name: _nameController.text.trim(),
@@ -165,6 +184,7 @@ class _RegisterPageState extends State<RegisterPage> {
         password: _passwordController.text.trim(),
         // Pass phone properly formated if needed
       ));
+      */
     }
   }
 }

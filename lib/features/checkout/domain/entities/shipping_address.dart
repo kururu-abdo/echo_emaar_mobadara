@@ -4,14 +4,14 @@ class ShippingAddress extends Equatable {
   final int? id; // Odoo res.partner ID (null for new address)
   final String name;
   final String phone;
-  final String street;
-  final String? street2;
+  final dynamic street;
+  final dynamic street2;
   final String? countryId;
   final String? stateId;
-  final String city;
-  final String? state;
-  final String? zip;
-  final String country;
+  final dynamic city;
+  final dynamic? state;
+  final dynamic zip;
+  final dynamic country;
   final bool isDefault;
 
   const ShippingAddress({

@@ -60,7 +60,7 @@ dependencies:
   formz: ^0.6.1
 
   # Phone Number
-  intl_phone_number_input: ^0.7.4
+  intl_phone_number_input: ^0.7.5
   dartz: ^0.10.1
   provider: ^6.1.5+1
   internet_connection_checker_plus: ^2.2.0

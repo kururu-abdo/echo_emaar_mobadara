@@ -366,7 +366,8 @@
   "partially_delivered": "تم التسليم جزئياً",
   "cancelled": "ملغي",
   "draft": "مسودة / عرض سعر",
-  "sent": "تم الإرسال"
+  "sent": "تم الإرسال" , 
+  "order_not_found":"الطلب غير موجود" 
   },
 
   "success": {

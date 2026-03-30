@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 24),
                     const Text(
-                      'AQUA ARTISAN',
+                      'مبادرة صدى الإعمار التجارية',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -196,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
           colors: [Theme.of(context).primaryColor, Theme.of(context).colorScheme.onSurface], // تدرج برتقالي حسب التصميم
         ),
         boxShadow: [
-          BoxShadow(color: Colors.orange.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 5)),
+          BoxShadow(color: Theme.of(context).primaryColor.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 5)),
         ],
       ),
       child: ElevatedButton(

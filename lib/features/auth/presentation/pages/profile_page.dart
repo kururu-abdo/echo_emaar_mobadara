@@ -2,6 +2,8 @@ import 'package:echoemaar_commerce/config/themes/theme_context.dart';
 import 'package:echoemaar_commerce/core/utilities/extensions.dart';
 import 'package:echoemaar_commerce/core/utilities/size_utils.dart';
 import 'package:echoemaar_commerce/core/utilities/typography_utils.dart';
+import 'package:echoemaar_commerce/features/auth/presentation/pages/edit_profile_page.dart';
+import 'package:echoemaar_commerce/features/cart/presentation/pages/cart_page.dart';
 import 'package:echoemaar_commerce/features/invoice/presentation/pages/invoice_page.dart';
 import 'package:echoemaar_commerce/features/orders/presentation/pages/order_history_page.dart';
 import 'package:echoemaar_commerce/features/settings/presentation/pages/setting_page.dart';
@@ -590,9 +592,14 @@ import '../bloc/auth_bloc.dart';
 import '../../domain/entities/user.dart';
 import '../../../../config/routes/route_names.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
@@ -614,11 +621,16 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-class _ProfileView extends StatelessWidget {
+class _ProfileView extends StatefulWidget {
   final User user;
 
   const _ProfileView({required this.user});
 
+  @override
+  State<_ProfileView> createState() => _ProfileViewState();
+}
+
+class _ProfileViewState extends State<_ProfileView> {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
@@ -634,7 +646,12 @@ class _ProfileView extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.shopping_cart_outlined, color: colors.primary),
-            onPressed: () {},
+            onPressed: () {
+
+
+                              Navigator.of(context).push(MaterialPageRoute(builder: (_)=> const CartPage()));
+
+            },
           ),
         ],
       ),
@@ -644,7 +661,7 @@ class _ProfileView extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
             // 1. Header: Avatar & Info
-            _buildProfileInfo(user),
+            _buildProfileInfo(widget.user),
             
             const SizedBox(height: 40),
             
@@ -695,10 +712,16 @@ class _ProfileView extends StatelessWidget {
                 child: Text(user.username[0].toUpperCase(), style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(color: Color(0xFF004D7A), shape: BoxShape.circle),
-              child: const Icon(Icons.edit, color: Colors.white, size: 16),
+            GestureDetector(
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (_)=> const EditProfilePage()));
+
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(color: Color(0xFF004D7A), shape: BoxShape.circle),
+                child: const Icon(Icons.edit, color: Colors.white, size: 16),
+              ),
             ),
           ],
         ),
@@ -783,7 +806,7 @@ Navigator.of(context).push(
         children: [
           _buildSettingsTile(context, 'Help Center', Icons.help_outline, trailingText: 'Get Support', isActionText: true),
           _buildDivider(),
-          _buildSettingsTile(context, 'About Aqua Artisan', Icons.info_outline, isExternal: true),
+          _buildSettingsTile(context, 'عن المبادرة', Icons.info_outline, isExternal: true),
         ],
       ),
     );

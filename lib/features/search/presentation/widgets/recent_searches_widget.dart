@@ -2,7 +2,64 @@
 import 'package:echoemaar_commerce/features/search/presentation/providers/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// lib/features/search/presentation/widgets/recent_searches_wrap.dart
+import 'package:flutter/material.dart';
 
+class RecentSearchesWrap extends StatelessWidget {
+  const RecentSearchesWrap({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final List<String> searches = [
+      'إكسسوارات حمام ذهبي',
+      'حوض رخام',
+      'خلاط مغسلة تركي',
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const Text('عمليات البحث الأخيرة', 
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const SizedBox(width: 8),
+              Icon(Icons.history, size: 18, color: Colors.grey.shade600),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            alignment: WrapAlignment.end,
+            children: searches.map((query) => _buildSearchTag(query)).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchTag(String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.close, size: 14, color: Colors.grey),
+          const SizedBox(width: 8),
+          Text(text, style: const TextStyle(fontSize: 13, color: Colors.black87)),
+        ],
+      ),
+    );
+  }
+}
 class RecentSearchesWidget extends StatelessWidget {
   const RecentSearchesWidget({super.key});
 

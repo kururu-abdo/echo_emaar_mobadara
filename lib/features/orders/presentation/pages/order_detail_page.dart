@@ -41,7 +41,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
           }
 
           if (order == null) {
-            return Center(child: Text(context.tr('order_not_found')));
+            return Center(child: Text(context.tr('orders.order_not_found')));
           }
 
           return SingleChildScrollView(

@@ -54,6 +54,7 @@ OrderDetail? _currentOrder;
 
     result.fold(
       (failure) {
+        log('ERROR $failure');
         detailsError = failure.message;
         isDetailsLoading = false;
         notifyListeners();

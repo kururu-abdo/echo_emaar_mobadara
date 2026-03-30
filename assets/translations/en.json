@@ -365,7 +365,8 @@
   "partially_delivered": "Partially Delivered",
   "cancelled": "Cancelled",
   "draft": "Quotation",
-  "sent": "Sent"
+  "sent": "Sent", 
+    "order_not_found":"Order not found" 
   },
 
   "success": {

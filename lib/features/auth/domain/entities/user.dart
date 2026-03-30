@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
-  final int uid;
-  final int partnerId;
-  final String username;
-  final String email;
-  final String? companyName;
-  final String sessionId;
+  final dynamic uid;
+  final dynamic partnerId;
+  final dynamic username;
+  final dynamic email;
+  final dynamic companyName;
+  final dynamic sessionId;
 
   
   const User({

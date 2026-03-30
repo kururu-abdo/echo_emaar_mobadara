@@ -3,6 +3,69 @@ import 'package:echoemaar_commerce/features/search/presentation/providers/search
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+
+// lib/features/search/presentation/widgets/advanced_filters_header.dart
+import 'package:flutter/material.dart';
+
+class AdvancedFiltersHeader extends StatelessWidget {
+  const AdvancedFiltersHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: () {},
+                child: const Text('مسح الكل', style: TextStyle(color: Colors.blue, fontSize: 14)),
+              ),
+              const Text(
+                'الفلاتر المتقدمة',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF004D7A)),
+              ),
+            ],
+          ),
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          reverse: true, // لترتيب العناصر من اليمين لليسار
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              _buildCategoryChip('الكل', true),
+              _buildCategoryChip('صنابير', false),
+              _buildCategoryChip('دش استحمام', false),
+              _buildCategoryChip('أحواض', false),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategoryChip(String label, bool isSelected) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      child: ChoiceChip(
+        label: Text(label),
+        selected: isSelected,
+        onSelected: (val) {},
+        selectedColor: const Color(0xFFFF7F50), // اللون البرتقالي المعتمد
+        backgroundColor: Colors.white,
+        labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.black87),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: isSelected ? Colors.transparent : Colors.black12),
+        ),
+      ),
+    );
+  }
+}
 class AdvancedFiltersWidget extends StatelessWidget {
   const AdvancedFiltersWidget({super.key});
 
