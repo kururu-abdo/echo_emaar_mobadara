@@ -4,6 +4,7 @@ import 'package:echoemaar_commerce/core/utilities/size_utils.dart';
 import 'package:echoemaar_commerce/core/utilities/typography_utils.dart';
 import 'package:echoemaar_commerce/features/auth/presentation/pages/edit_profile_page.dart';
 import 'package:echoemaar_commerce/features/cart/presentation/pages/cart_page.dart';
+import 'package:echoemaar_commerce/features/checkout/presentation/pages/saved_address_page.dart';
 import 'package:echoemaar_commerce/features/invoice/presentation/pages/invoice_page.dart';
 import 'package:echoemaar_commerce/features/orders/presentation/pages/order_history_page.dart';
 import 'package:echoemaar_commerce/features/settings/presentation/pages/setting_page.dart';
@@ -768,7 +769,12 @@ class _ProfileViewState extends State<_ProfileView> {
         const SizedBox(height: 16),
         Row(
           children: [
-            Expanded(child: _HubItem(title: 'Saved\nAddresses', subtitle: '3 Locations', icon: Icons.location_on_outlined, onTap: () {})),
+            Expanded(child: _HubItem(title: 'Saved\nAddresses', subtitle: '3 Locations', icon: Icons.location_on_outlined, onTap: () {
+
+
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> const SavedAddressesPage()));
+
+            })),
             const SizedBox(width: 16),
             Expanded(child: _HubItem(title: 'invoices', subtitle: 'Your invoices', icon: Icons.receipt, onTap: () {
 Navigator.of(context).push(
